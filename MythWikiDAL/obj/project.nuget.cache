@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9vy84caNLz0FcRMM3IkV70JrTF8kN2ivjwAUMoCQcPR3xZ/aAQTpEynBS6wmvttaAAKCYaB6qCckbKwpQ+Yr5g==",
+  "dgSpecHash": "nXdkIIz0ONnKvWW/4ib7IsXjqDenIjZReUX4+N/byJIHo6wAoc7F5HsMLHsMN8gQNg7Ud5RMH0swQoq0v/BzYA==",
   "success": true,
-  "projectFilePath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiDAL/MythWikiDAL.csproj",
+  "projectFilePath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
