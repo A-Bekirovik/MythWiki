@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MythWikiDAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7346eeba834a7eeb23e5b9afb2e56c6eb675075e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+917e7f52060d75cc957ae43c75160bfc7e56944e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MythWikiDAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MythWikiDAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
