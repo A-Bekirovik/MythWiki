@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj": {}
+    "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj": {}
   },
   "projects": {
-    "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj": {
+    "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
+        "projectUniqueName": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
         "projectName": "MythWikiLogic",
-        "projectPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
+        "projectPath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
         "packagesPath": "/Users/arvenbekirovik/.nuget/packages/",
-        "outputPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/obj/",
+        "outputPath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/arvenbekirovik/.nuget/NuGet/NuGet.Config"

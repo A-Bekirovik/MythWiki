@@ -3,12 +3,12 @@ namespace MythWiki.Models
 {
 	public class Subject
 	{
-        public int SubjectID { get; private set; }
-        public string Title { get; private set; }
-        public string Text { get; private set; }
-        public string Image { get; private set; }
-        public DateTime Date { get; private set; }
-        public List<User> Authors { get; private set; }
+        public int SubjectID { get;  set; }
+        public string Title { get;  set; }
+        public string Text { get;  set; }
+        public string Image { get;  set; }
+        public DateTime Date { get;  set; }
+        public List<User> Authors { get;  set; }
 
         public Subject()
         {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "heXZzfAXhj4SEKqLrx9+QGcPc6dIfD5suDuer5fKit2eRhm7T8XVww5GZ9eUZBrJJLvojtz+UTxifm1XTLOs+g==",
+  "dgSpecHash": "TstHRHNMbKXB2SmyCFG8B76+Av5WDeAx31RKNr64cA36UlwqkZhS3WkyuTq1aq/2RiE8utSDtVS13GJhLbLvtw==",
   "success": true,
-  "projectFilePath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
+  "projectFilePath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
   "expectedPackageFiles": [
     "/Users/arvenbekirovik/.nuget/packages/bouncycastle.cryptography/2.2.1/bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "/Users/arvenbekirovik/.nuget/packages/google.protobuf/3.25.1/google.protobuf.3.25.1.nupkg.sha512",
@@ -37,5 +37,12 @@
     "/Users/arvenbekirovik/.nuget/packages/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg.sha512",
     "/Users/arvenbekirovik/.nuget/packages/zstdsharp.port/0.7.1/zstdsharp.port.0.7.1.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

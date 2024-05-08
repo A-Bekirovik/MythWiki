@@ -1791,11 +1791,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
+      "projectUniqueName": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
       "projectName": "MythWikiLogic",
-      "projectPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
+      "projectPath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/MythWikiLogic.csproj",
       "packagesPath": "/Users/arvenbekirovik/.nuget/packages/",
-      "outputPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/obj/",
+      "outputPath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/arvenbekirovik/.nuget/NuGet/NuGet.Config"
@@ -1855,5 +1855,13 @@
         "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.204/RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file /Users/arvenbekirovik/Projects/MythWiki/MythWikiLogic/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

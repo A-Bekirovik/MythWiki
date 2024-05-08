@@ -1,0 +1,16 @@
+﻿@model MythWiki.Models.Subject
+
+@{
+    ViewData["Title"] = "AddSubject";
+}
+
+<h2>Add Subject</h2>
+
+<p>Voeg via deze pagina een subject!</p>
+
+<div>
+    @using (Html.BeginForm()) 
+	{
+	    <p>Author Name: @Html.TextBoxFor(m=> Subject.Title)</p> 
+	}
+</div>
