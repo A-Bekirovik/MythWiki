@@ -11,4 +11,18 @@
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.3.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Subjects\" />
+    <None Remove="Subjects\Commands\" />
+    <None Remove="Models\" />
+    <None Remove="Models\SubjectModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Subjects\" />
+    <Folder Include="Subjects\Commands\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\SubjectModel.cs" />
+  </ItemGroup>
 </Project>
