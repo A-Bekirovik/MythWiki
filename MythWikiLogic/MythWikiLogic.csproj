@@ -16,11 +16,13 @@
     <None Remove="Subjects\Commands\" />
     <None Remove="Models\" />
     <None Remove="Models\SubjectModel" />
+    <None Remove="IRepository\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Subjects\" />
     <Folder Include="Subjects\Commands\" />
     <Folder Include="Models\" />
+    <Folder Include="IRepository\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\SubjectModel.cs" />
