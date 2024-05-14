@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MythWikiLogic")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a69173fd31da33e46af7a70694debcc130b5936b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("MythWikiLogic")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MythWikiLogic")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

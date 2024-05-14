@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eMx/tgcv2OgUvBjtmz9NFLsa29d9V6Ly5+5fKJSUYMNuN8IdRxSeB0tnliKc2P+KW/S3T2xFEgMQ6p4kZTPpaA==",
+  "dgSpecHash": "oDC1Uf5y64bfMXri+8gKkVf4O/5tv0QiTYkxOi/JvCoeZ6G9dEnPb7psUBhP2eb8p8yMD7hsFOFQg6jQrXJ5Ow==",
   "success": true,
-  "projectFilePath": "/Users/arvenbekirovik/Projects/MythWiki/MythWikiDAL/MythWikiDAL.csproj",
+  "projectFilePath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj",
   "expectedPackageFiles": [
     "/Users/arvenbekirovik/.nuget/packages/bouncycastle.cryptography/2.2.1/bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "/Users/arvenbekirovik/.nuget/packages/google.protobuf/3.25.1/google.protobuf.3.25.1.nupkg.sha512",
@@ -42,7 +42,7 @@
       "code": "Undefined",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/arvenbekirovik/Projects/MythWiki/MythWikiDAL/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+      "message": "Problem reading the cache file /Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
     }
   ]
 }

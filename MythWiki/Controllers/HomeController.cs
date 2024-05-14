@@ -8,6 +8,8 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
+    private List<Subject> subjectlist = new List<Subject>();
+
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
@@ -28,6 +30,29 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpPost]
+    public ActionResult AddSubject(Subject newsubject)
+    {        
+        string title = newsubject.Title;
+        string Text = newsubject.Text;
+        string image = newsubject.Image;
+        DateTime date = newsubject.Date;
+
+        if (newsubject != null && !string.IsNullOrEmpty(newsubject.Title) && !string.IsNullOrEmpty(newsubject.Text) && !string.IsNullOrEmpty(newsubject.Image) && newsubject.Date != DateTime.MinValue)
+        {
+            subjectlist.Add(newsubject);
+
+            return RedirectToAction("Index", "Home");
+        }
+        else
+        {
+
+            ModelState.AddModelError("", "Please fill in all the required fields.");
+            return View();
+        }
+    }
+
+    [HttpGet]
     public IActionResult AddSubject()
     {
         return View();
@@ -36,6 +61,15 @@ public class HomeController : Controller
     public IActionResult RemoveSubject() 
     {
         return View(); 
+    }
+
+    public IActionResult ShowList()
+    {
+        foreach (var subject in subjectlist)
+        {
+            Console.WriteLine(subject);
+        }
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
