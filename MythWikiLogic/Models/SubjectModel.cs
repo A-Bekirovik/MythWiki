@@ -1,7 +1,7 @@
 ﻿using System;
 namespace MythWikiLogic.Models
 {
-	public class SubjectDTO
+	public class SubjectModel
 	{
         public int SubjectID { get; set; }
         public int EditorID { get; set; }
@@ -11,7 +11,7 @@ namespace MythWikiLogic.Models
         public string Authors { get; set; }
         public DateTime Date { get; set; }
 
-        public SubjectDTO()
+        public SubjectModel()
 		{
 		}
 	}

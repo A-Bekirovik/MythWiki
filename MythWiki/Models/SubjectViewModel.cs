@@ -1,7 +1,7 @@
 ﻿using System;
 namespace MythWiki.Models
 {
-	public class Subject
+	public class SubjectViewModel
 	{
         public int SubjectID { get;  set; }
         public string Title { get;  set; }
@@ -10,7 +10,7 @@ namespace MythWiki.Models
         public DateTime Date { get;  set; }
         public string Authors { get;  set; }
 
-        public Subject()
+        public SubjectViewModel()
         {
 
 		}
