@@ -29,9 +29,4 @@
   <ItemGroup>
     <Compile Include="Models\SubjectModel.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MythWikiDAL\MythWikiDAL.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

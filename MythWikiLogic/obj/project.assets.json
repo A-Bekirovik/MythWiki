@@ -535,22 +535,6 @@
         "runtime": {
           "lib/net7.0/ZstdSharp.dll": {}
         }
-      },
-      "MythWikiDAL/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
-        "dependencies": {
-          "MySql.Data": "8.3.0"
-        },
-        "compile": {
-          "bin/placeholder/MythWikiDAL.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/MythWikiDAL.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
       }
     }
   },
@@ -1794,17 +1778,11 @@
         "zstdsharp.port.0.7.1.nupkg.sha512",
         "zstdsharp.port.nuspec"
       ]
-    },
-    "MythWikiDAL/1.0.0": {
-      "type": "project",
-      "path": "../MythWikiDAL/MythWikiDAL.csproj",
-      "msbuildProject": "../MythWikiDAL/MythWikiDAL.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "MySql.Data >= 8.3.0",
-      "MythWikiDAL >= 1.0.0"
+      "MySql.Data >= 8.3.0"
     ]
   },
   "packageFolders": {
@@ -1833,11 +1811,7 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {
-            "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj": {
-              "projectPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
