@@ -1,11 +1,16 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MythWiki.Models;
+using MythWikiLogic.Models;
+using MythWikiLogic.Services;
 
 namespace MythWiki.Controllers;
 
 public class HomeController : Controller
 {
+
+    UserService userservice = new UserService();
+
     private readonly ILogger<HomeController> _logger;
 
     private List<Subject> subjectlist = new List<Subject>();
@@ -15,9 +20,17 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+
+
     public IActionResult Index()
     {
-        return View();
+        UserViewModel userviewmodel = new UserViewModel();
+
+        List<UserModel> users;
+        users = userservice.GetAllUsers();
+        userviewmodel.userlist = users;
+
+        return View(userviewmodel);
     }
 
     public IActionResult Privacy()

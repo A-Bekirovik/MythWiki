@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading;
+using System.Linq;
 using MythWikiDAL.DTO;
 using MythWikiDAL.Repository;
+using MythWikiLogic.Models;
 
 namespace MythWikiLogic.Services
 {
     public class UserService 
     {
-        List<UserDTO> users = new List<UserDTO>();
+        List<UserDTO> usersDTO = new List<UserDTO>();
 
         private readonly UserRepository _userRepository;
 
@@ -15,9 +18,10 @@ namespace MythWikiLogic.Services
             _userRepository = new UserRepository();
         }
 
-        public List<UserDTO> GetAllUsers()
+        public List<UserModel> GetAllUsers()
         {
-            users = _userRepository.GetAllUsers();
+            usersDTO = _userRepository.GetAllUsers();
+            List<UserModel> users = usersDTO.Select(dto => new UserModel(dto)).ToList();
             return users;
         }
     }
