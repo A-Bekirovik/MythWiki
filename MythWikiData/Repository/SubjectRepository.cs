@@ -1,11 +1,12 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using MythWikiData.DTO;
 
 namespace MythWikiData.Repository
 {
 	public class SubjectRepository
 	{
-        private string connectionString = "Server=127.0.0.1;Database=DB IP;Uid=root;Pwd=;";
+        private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
 
         public void GetSubjects()
         {
@@ -27,8 +28,10 @@ namespace MythWikiData.Repository
             }
         }
 
-        public void GetAllSubjects()
+        public List<SubjectDTO> GetAllSubjects()
         {
+            List<SubjectDTO> subjects = new List<SubjectDTO>();
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
@@ -38,13 +41,17 @@ namespace MythWikiData.Repository
 
                 while (reader.Read())
                 {
-                    string data = reader.GetString(0);
-                    Console.WriteLine(data);
-                    Console.WriteLine(reader["UserID"]);
+                    SubjectDTO subject = new SubjectDTO
+                    {
+                        SubjectID = Convert.ToInt16(reader["SubjectID"]),
+                        Title = reader["Title"].ToString(),
+                        Text = reader["Text"].ToString()
+                    };
+                    subjects.Add(subject);
                 }
-
                 reader.Close();
             }
+            return subjects;
         }
     }
 }
