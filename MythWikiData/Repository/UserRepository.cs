@@ -7,7 +7,7 @@ namespace MythWikiData.Repository
 	public class UserRepository
 	{
 
-        private string connectionString = "Server=127.0.0.1;Database=DB IP;Uid=root;Pwd=;";
+        private string connectionString = "server=localhost;uid=root;pwd=;database=DB IP";
 
         public UserRepository()
 		{

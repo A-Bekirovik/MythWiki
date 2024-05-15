@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 
 public class DatabaseConnection 
     {   
-        private string connectionString = "Server=127.0.0.1;Database=DB IP;Uid=root;Pwd=;";
+        private string connectionString = "Server=root;Database=DB IP;Uid=root;Pwd=;";
 
     public void GetUsers()
         {
