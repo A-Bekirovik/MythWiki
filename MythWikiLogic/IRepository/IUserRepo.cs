@@ -1,8 +1,11 @@
 ﻿using System;
+using MythWikiLogic.Models;
 namespace MythWikiLogic.IRepository
 {
-	public interface IUserRepo
-	{
-	}
+    public interface IUserService
+    { 
+        List<UserModel> GetAllUsers();
+    }
+
 }
 
