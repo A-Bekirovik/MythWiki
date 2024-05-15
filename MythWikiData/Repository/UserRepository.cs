@@ -2,11 +2,10 @@
 using MySql.Data.MySqlClient;
 using MythWikiData.DTO;
 
-namespace MythWikiDAL.Repository
+namespace MythWikiData.Repository
 {
 	public class UserRepository
 	{
-
 
         private string connectionString = "Server=127.0.0.1;Database=DB IP;Uid=root;Pwd=;";
 
