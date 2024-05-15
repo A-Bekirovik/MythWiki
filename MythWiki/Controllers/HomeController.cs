@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MythWiki.Models;
-using MythWikiLogic.Models;
-using MythWikiLogic.Services;
+using MythWikiBusiness.Models;
+using MythWikiBusiness.Services;
 
 namespace MythWiki.Controllers;
 
@@ -26,7 +26,7 @@ public class HomeController : Controller
     {
         UserViewModel userviewmodel = new UserViewModel();
 
-        List<UserModel> users;
+        List<User> users;
         users = userservice.GetAllUsers();
         userviewmodel.userlist = users;
 

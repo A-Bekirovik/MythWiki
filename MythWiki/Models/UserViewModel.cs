@@ -1,11 +1,11 @@
 ﻿using System;
-using MythWikiLogic.Models;
+using MythWikiBusiness.Models;
 
 namespace MythWiki.Models
 {
 	public class UserViewModel
 	{
-		public List<UserModel> userlist { get; set; }
+		public List<User> userlist { get; set; }
 
 	}
 }
