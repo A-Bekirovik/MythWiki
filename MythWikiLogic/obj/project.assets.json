@@ -535,6 +535,22 @@
         "runtime": {
           "lib/net7.0/ZstdSharp.dll": {}
         }
+      },
+      "MythWikiDAL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "MySql.Data": "8.3.0"
+        },
+        "compile": {
+          "bin/placeholder/MythWikiDAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MythWikiDAL.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -1778,11 +1794,17 @@
         "zstdsharp.port.0.7.1.nupkg.sha512",
         "zstdsharp.port.nuspec"
       ]
+    },
+    "MythWikiDAL/1.0.0": {
+      "type": "project",
+      "path": "../MythWikiDAL/MythWikiDAL.csproj",
+      "msbuildProject": "../MythWikiDAL/MythWikiDAL.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "MySql.Data >= 8.3.0"
+      "MySql.Data >= 8.3.0",
+      "MythWikiDAL >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1811,7 +1833,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj": {
+              "projectPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -1851,13 +1877,5 @@
         "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.315/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

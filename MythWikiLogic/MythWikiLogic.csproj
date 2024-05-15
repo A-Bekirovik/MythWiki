@@ -17,14 +17,21 @@
     <None Remove="Models\" />
     <None Remove="Models\SubjectModel" />
     <None Remove="IRepository\" />
+    <None Remove="Service\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Subjects\" />
     <Folder Include="Subjects\Commands\" />
     <Folder Include="Models\" />
     <Folder Include="IRepository\" />
+    <Folder Include="Service\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\SubjectModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MythWikiDAL\MythWikiDAL.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>

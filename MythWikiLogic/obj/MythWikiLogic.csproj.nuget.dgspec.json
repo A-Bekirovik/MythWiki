@@ -4,6 +4,70 @@
     "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj": {}
   },
   "projects": {
+    "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj",
+        "projectName": "MythWikiDAL",
+        "projectPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj",
+        "packagesPath": "/Users/arvenbekirovik/.nuget/packages/",
+        "outputPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/arvenbekirovik/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "/usr/local/share/dotnet/sdk/7.0.315/Sdks/Microsoft.NET.Sdk.Web/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.315/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiLogic/MythWikiLogic.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -27,7 +91,11 @@
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj": {
+                "projectPath": "/Users/arvenbekirovik/Documents/GitHub/MythWiki/MythWikiDAL/MythWikiDAL.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
