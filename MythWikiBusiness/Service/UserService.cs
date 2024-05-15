@@ -18,10 +18,10 @@ namespace MythWikiBusiness.Services
             _userRepository = new UserRepository();
         }
 
-        public List<UserModel> GetAllUsers()
+        public List<User> GetAllUsers()
         {
             usersDTO = _userRepository.GetAllUsers();
-            List<UserModel> users = usersDTO.Select(dto => new UserModel(dto)).ToList();
+            List<User> users = usersDTO.Select(dto => new User(dto)).ToList();
             return users;
         }
     }

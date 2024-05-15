@@ -1,12 +1,12 @@
 ﻿using System;
 namespace MythWikiBusiness.Models
 {
-	public class EditorModel
+	public class Subchats
 	{
-        public int SubjectID { get; set; }
         public int UserID { get; set; }
+        public int ReplyID { get; set; }
 
-        public EditorModel()
+        public Subchats()
 		{
 		}
 	}

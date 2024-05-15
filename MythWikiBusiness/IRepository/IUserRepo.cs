@@ -4,7 +4,7 @@ namespace MythWikiBusiness.IRepository
 {
     public interface IUserService
     { 
-        List<UserModel> GetAllUsers();
+        List<User> GetAllUsers();
     }
 
 }

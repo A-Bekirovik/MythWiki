@@ -2,7 +2,7 @@
 using MythWikiData.DTO;
 namespace MythWikiBusiness.Models
 {
-	public class UserModel
+	public class User
 	{
         public int UserID { get; private set; }
         public string Name { get; private set; }
@@ -10,11 +10,11 @@ namespace MythWikiBusiness.Models
         public string Email { get; private set; }
         public bool Admin { get; private set; }
 
-        public UserModel() 
+        public User() 
 	    { 
 	    }
 
-        public UserModel(UserDTO userdto)
+        public User(UserDTO userdto)
 		{
             Name = userdto.Name;
             UserID = userdto.UserID;
