@@ -6,13 +6,11 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Hier moet een lijst komen met alle Subjects waar je op kan klikken:</p>
-    <p>(Lijst)</p>
     <div>
         @foreach (var user in Model.userlist) 
 	        {
 		        <article>
-		            <p>@user.Name</p>
-                    <p>@user.UserID</p>                
+		            <p>@user.Name</p>            
 		        </article> 
 	        }
     </div>
