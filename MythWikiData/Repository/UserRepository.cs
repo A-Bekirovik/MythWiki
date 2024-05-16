@@ -1,7 +1,6 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
-using MythWikiData;
 using MythWikiBusiness.IRepository;
 
 namespace MythWikiData.Repository

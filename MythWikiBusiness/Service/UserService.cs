@@ -7,29 +7,25 @@ using MythWikiBusiness.Models;
 
 namespace MythWikiBusiness.Services
 {
-    public class UserService : IUserRepo
+    public class UserService
     {
         List<UserDTO> usersDTO = new List<UserDTO>();        
 
         private readonly IUserRepo _userRepository;
-
-        private readonly IUserRepo interfacerepo;
-
-
 
         public UserService(IUserRepo userrepo)
         {
             _userRepository = userrepo;
         }
 
-        public List<UserDTO> GetAllUsers()
+        public List<User> GetAllUsers()
         {
-            usersDTO = _userRepository.GetAllUsers();
-            List<UserDTO> users = new List<UserDTO>();
-
+            List<UserDTO> usersDTO = new List<UserDTO>();
+            List<User> users = new List<User>();
+            usersDTO = _userRepository.GetAllUsers();	   
             foreach (var dto in usersDTO)
             {
-                users.Add(dto);
+                users.Add(new User(dto));
             }
 
             return users;

@@ -26,16 +26,8 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         UserViewModel userviewmodel = new UserViewModel();
-
-        List<User> users = new List<User>();
-        List<UserDTO> userDTOs = userservice.GetAllUsers();
-        foreach (var dto in userDTOs)
-        {
-            users.Add(new User(dto));
-        }
-
+        List<User> users = userservice.GetAllUsers();   
         userviewmodel.userlist = users;
-
         return View(userviewmodel);
     }
 
