@@ -1,5 +1,7 @@
 ﻿using System;
-namespace MythWikiData.DTO
+using MythWikiBusiness.Models;
+
+namespace MythWikiBusiness.DTO
 {
 	public class UserDTO
 	{
@@ -8,7 +10,7 @@ namespace MythWikiData.DTO
 	}
 }
 
-namespace MythWikiData.DTO
+namespace MythWikiBusiness.DTO
 {
     public class UserDetailDTO
     {

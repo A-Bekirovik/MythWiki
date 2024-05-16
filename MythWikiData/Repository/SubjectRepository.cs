@@ -1,32 +1,13 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using MythWikiBusiness.IRepository;
 using MythWikiData.DTO;
 
 namespace MythWikiData.Repository
 {
-	public class SubjectRepository
+	public class SubjectRepository : ISubjectRepo
 	{
         private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
-
-        public void GetSubjects()
-        {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                MySqlCommand command = new MySqlCommand("SELECT * FROM Subject", connection);
-                MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    string data = reader.GetString(0);
-                    Console.WriteLine(data);
-                    Console.WriteLine(reader["SubjectID"]);
-                }
-
-                reader.Close();
-            }
-        }
 
         public List<SubjectDTO> GetAllSubjects()
         {
