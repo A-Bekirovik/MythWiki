@@ -1,28 +1,34 @@
 ﻿using System;
 using System.Threading;
 using System.Linq;
-using MythWikiData.DTO;
-using MythWikiData.Repository;
+using MythWikiBusiness.DTO;
+using MythWikiBusiness.IRepository;
 using MythWikiBusiness.Models;
 
 namespace MythWikiBusiness.Services
 {
-    public class UserService 
+    public class UserService : IUserRepo
     {
-        List<UserDTO> usersDTO = new List<UserDTO>();
+        List<UserDTO> usersDTO = new List<UserDTO>();        
 
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepo _userRepository;
 
-        public UserService()
+        public UserService(IUserRepo userrepo)
         {
-            _userRepository = new UserRepository();
+            _userRepository = userrepo;
         }
 
-        public List<User> GetAllUsers()
+        public List<UserDTO> GetAllUsers()
         {
             usersDTO = _userRepository.GetAllUsers();
-            List<User> users = usersDTO.Select(dto => new User(dto)).ToList();
-            return users;
+            List<User> userss = new List<User>();
+
+            foreach (var dto in usersDTO)
+            {
+                userss.Add(new User(dto));
+            }
+            //List<UserDTO> users = usersDTO.Select(dto => new User(dto)).ToList();
+            return userss;
         }
     }
 }

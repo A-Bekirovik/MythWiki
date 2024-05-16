@@ -8,6 +8,7 @@ namespace MythWiki.Controllers;
 
 public class HomeController : Controller
 {
+    
 
     UserService userservice = new UserService();
 

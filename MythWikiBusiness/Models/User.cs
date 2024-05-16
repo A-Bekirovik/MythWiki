@@ -1,5 +1,5 @@
 ﻿using System;
-using MythWikiData.DTO;
+using MythWikiBusiness.DTO;
 namespace MythWikiBusiness.Models
 {
 	public class User

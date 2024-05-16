@@ -9,13 +9,13 @@
   <ItemGroup>
     <None Remove="Service\" />
     <None Remove="Models\" />
-    <None Remove="IRepository\" />
     <None Remove="DTO\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\" />
     <Folder Include="Models\" />
-    <Folder Include="IRepository\" />
     <Folder Include="DTO\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

@@ -1,17 +1,15 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
-using MythWikiData.DTO;
+using MythWikiBusiness.DTO;
+using MythWikiData;
+using MythWikiBusiness.IRepository;
 
 namespace MythWikiData.Repository
 {
-	public class UserRepository
+	public class UserRepository : IUserRepo
 	{
 
         private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
-
-        public UserRepository()
-		{
-		}
 
         public List<UserDTO> GetAllUsers()
         {

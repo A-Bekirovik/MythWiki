@@ -17,8 +17,5 @@
     <ProjectReference Include="..\MythWikiBusiness\MythWikiBusiness.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\MythWikiData\MythWikiData.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
   </ItemGroup>
 </Project>
