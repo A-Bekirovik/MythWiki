@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using MythWiki.Models;
 using MythWikiBusiness.Models;
 using MythWikiBusiness.Services;
+using MythWikiBusiness.IRepository;
+using MythWikiBusiness.DTO;
+using MythWikiData.Repository;
 
 namespace MythWiki.Controllers;
 
@@ -10,25 +13,27 @@ public class HomeController : Controller
 {
     
 
-    UserService userservice = new UserService();
-
     private readonly ILogger<HomeController> _logger;
+    private readonly UserService userservice;
 
     private List<Subject> subjectlist = new List<Subject>();
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController()
     {
-        _logger = logger;
+        userservice = new UserService(new UserRepository());
     }
-
-
 
     public IActionResult Index()
     {
         UserViewModel userviewmodel = new UserViewModel();
 
-        List<User> users;
-        users = userservice.GetAllUsers();
+        List<User> users = new List<User>();
+        List<UserDTO> userDTOs = userservice.GetAllUsers();
+        foreach (var dto in userDTOs)
+        {
+            users.Add(new User(dto));
+        }
+
         userviewmodel.userlist = users;
 
         return View(userviewmodel);

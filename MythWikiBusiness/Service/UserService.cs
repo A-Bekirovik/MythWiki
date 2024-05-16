@@ -13,6 +13,10 @@ namespace MythWikiBusiness.Services
 
         private readonly IUserRepo _userRepository;
 
+        private readonly IUserRepo interfacerepo;
+
+
+
         public UserService(IUserRepo userrepo)
         {
             _userRepository = userrepo;
