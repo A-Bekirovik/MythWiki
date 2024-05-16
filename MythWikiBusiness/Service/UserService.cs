@@ -21,14 +21,14 @@ namespace MythWikiBusiness.Services
         public List<UserDTO> GetAllUsers()
         {
             usersDTO = _userRepository.GetAllUsers();
-            List<User> userss = new List<User>();
+            List<UserDTO> users = new List<UserDTO>();
 
             foreach (var dto in usersDTO)
             {
-                userss.Add(new User(dto));
+                users.Add(dto);
             }
-            //List<UserDTO> users = usersDTO.Select(dto => new User(dto)).ToList();
-            return userss;
+
+            return users;
         }
     }
 }
