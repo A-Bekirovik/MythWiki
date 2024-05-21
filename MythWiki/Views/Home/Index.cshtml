@@ -1,4 +1,4 @@
-﻿@model UserViewModel
+﻿@model SubjectViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -7,10 +7,10 @@
     <h1 class="display-4">Welcome</h1>
     <p>Hier moet een lijst komen met alle Subjects waar je op kan klikken:</p>
     <div>
-        @foreach (var user in Model.userlist) 
+        @foreach (var subject in Model.subjectlist) 
 	        {
 		        <article>
-		            <p>@user.Name</p>            
+		            <p>@subject.Title</p>            
 		        </article> 
 	        }
     </div>

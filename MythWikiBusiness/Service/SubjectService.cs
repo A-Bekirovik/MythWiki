@@ -12,6 +12,23 @@ namespace MythWikiBusiness.Services
 		List<SubjectDTO> subjectDTO = new List<SubjectDTO>();
 
 		private readonly ISubjectRepo _subjectRepository;
+
+		public SubjectService(ISubjectRepo subjectrepo) 
+		{
+			_subjectRepository = subjectrepo; 
+		}
+
+		public List<Subject> GetAllSubjects() 
+		{
+			List<SubjectDTO> subjectDTO = new List<SubjectDTO>();
+			List<Subject> subjects = new List<Subject>();
+			subjectDTO = _subjectRepository.GetAllSubjects();
+            foreach (var dto in subjectDTO)
+            {
+                subjects.Add(new Subject(dto));
+            }
+            return subjects;
+		}
 	}
 }
 

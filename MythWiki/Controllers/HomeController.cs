@@ -15,20 +15,25 @@ public class HomeController : Controller
 
     private readonly ILogger<HomeController> _logger;
     private readonly UserService userservice;
+    private readonly SubjectService subjectservice;
 
     private List<Subject> subjectlist = new List<Subject>();
 
     public HomeController()
     {
         userservice = new UserService(new UserRepository());
+        subjectservice = new SubjectService(new SubjectRepository());
     }
 
     public IActionResult Index()
     {
+        SubjectViewModel subjectviewmodel = new SubjectViewModel();
         UserViewModel userviewmodel = new UserViewModel();
-        List<User> users = userservice.GetAllUsers();   
+        List<Subject> subjects = subjectservice.GetAllSubjects();
+        List<User> users = userservice.GetAllUsers();
+        subjectviewmodel.subjectlist = subjects;   
         userviewmodel.userlist = users;
-        return View(userviewmodel);
+        return View(subjectviewmodel);
     }
 
     public IActionResult Privacy()
