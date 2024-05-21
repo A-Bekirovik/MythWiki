@@ -46,6 +46,10 @@ namespace MythWikiBusiness.Services
             return new Subject(subjectDTO);
         }
 
+        public bool DeleteSubject(int subjectID)
+        {
+            return _subjectRepository.DeleteSubject(subjectID);
+        }
     }
 }
 

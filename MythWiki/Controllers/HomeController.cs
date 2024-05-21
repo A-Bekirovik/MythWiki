@@ -51,6 +51,27 @@ public class HomeController : Controller
         return View(subject);
     }
 
+    public IActionResult DeleteSubject()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult DeleteSubject(int subjectID)
+    {
+        bool isDeleted = subjectservice.DeleteSubject(subjectID);
+        if (isDeleted)
+        {
+            TempData["Message"] = "Subject successfully deleted.";
+        }
+        else
+        {
+            TempData["Message"] = "Subject not found.";
+        }
+
+        return RedirectToAction("Index");
+    }
+
     [HttpPost]
     public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
     {
