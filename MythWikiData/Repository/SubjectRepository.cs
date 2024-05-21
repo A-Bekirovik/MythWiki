@@ -34,6 +34,33 @@ namespace MythWikiData.Repository
             }
             return subjects;
         }
+
+        public SubjectDTO CreateSubject(string title, string text) 
+	    {
+            SubjectDTO newsubject = new SubjectDTO();
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                MySqlCommand command = new MySqlCommand("INSERT INTO Subject (Title, Text) VALUES (@Title, @Text)", connection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    SubjectDTO subject = new SubjectDTO
+                    {
+                        SubjectID = Convert.ToInt16(reader["SubjectID"]),
+                        Title = reader["Title"].ToString(),
+                        Text = reader["Text"].ToString()
+                    };
+                    subject = newsubject;
+                }
+                reader.Close();
+            }
+
+            return newsubject;
+        } 
     }
 }
 
