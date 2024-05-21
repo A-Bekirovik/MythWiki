@@ -118,6 +118,39 @@ namespace MythWikiData.Repository
 
             return isDeleted;
         }
+
+        //Get subject by id
+        public SubjectDTO GetSubjectById(int id)
+        {
+            SubjectDTO subject = null;
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT * FROM Subject WHERE SubjectID = @SubjectID";
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@SubjectID", id);
+
+                MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    subject = new SubjectDTO
+                    {
+                        SubjectID = Convert.ToInt32(reader["SubjectID"]),
+                        Title = reader["Title"].ToString(),
+                        Text = reader["Text"].ToString(),
+                        EditorID = Convert.ToInt32(reader["EditorID"]),
+                        Image = reader["Image"].ToString(),
+                        Author = reader["Author"].ToString(),
+                        Date = Convert.ToDateTime(reader["Date"])
+                    };
+                }
+                reader.Close();
+            }
+
+            return subject;
+        }
     }
 }
-

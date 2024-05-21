@@ -41,10 +41,14 @@ public class HomeController : Controller
     {
         return View();
     }
-
-        public IActionResult Subject()
+    public IActionResult Subject(int id)
     {
-        return View();
+        var subject = subjectservice.GetSubjectById(id);
+        if (subject == null)
+        {
+            return NotFound();
+        }
+        return View(subject);
     }
 
     [HttpPost]

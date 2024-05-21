@@ -1,9 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Subject";
+﻿@model MythWikiBusiness.Models.Subject
+
+@{
+    ViewData["Title"] = "Subject Details";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Hier moet tekst over een specifiek subject</h1>
-    <p>kk</p>
+    <h1 class="display-4">@Model.Title</h1>
+    <p>Author: @Model.Author</p>
+    <p>Date: @Model.Date.ToString("MM/dd/yyyy")</p>
+    <p>@Model.Text</p>
+    @if (!string.IsNullOrEmpty(@Model.Image))
+    {
+        <img src="@Model.Image" alt="Subject Image" class="img-fluid" />
+    }
 </div>
 
+<div class="text-center">
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

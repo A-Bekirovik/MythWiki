@@ -35,6 +35,17 @@ namespace MythWikiBusiness.Services
 			Subject newsubject = new Subject(newsubjectDTO);
 			return newsubject;			 
 		}
-	}
+
+        public Subject GetSubjectById(int id)
+        {
+            var subjectDTO = _subjectRepository.GetSubjectById(id);
+            if (subjectDTO == null)
+            {
+                return null;
+            }
+            return new Subject(subjectDTO);
+        }
+
+    }
 }
 
