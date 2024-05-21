@@ -38,9 +38,15 @@ namespace MythWikiData.Repository
         //Create Subject
         public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
         {
+            Console.WriteLine($"Repository - Title: {title}");
+            Console.WriteLine($"Repository - Text: {text}");
+            Console.WriteLine($"Repository - EditorID: {editorid}");
+            Console.WriteLine($"Repository - Image Link: {imagelink}");
+            Console.WriteLine($"Repository - Author Name: {authorname}");
+            Console.WriteLine($"Repository - Date: {date}");
+
             if (string.IsNullOrEmpty(title)) throw new ArgumentException("Title cannot be null or empty");
-            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");
-            if (string.IsNullOrEmpty(authorname)) throw new ArgumentException("Author name cannot be null or empty");
+            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");         
 
             SubjectDTO newSubject = new SubjectDTO();
 

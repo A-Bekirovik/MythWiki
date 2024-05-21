@@ -20,9 +20,8 @@ namespace MythWikiBusiness.Services
 
 		public List<Subject> GetAllSubjects() 
 		{
-			List<SubjectDTO> subjectDTO = new List<SubjectDTO>();
-			List<Subject> subjects = new List<Subject>();
-			subjectDTO = _subjectRepository.GetAllSubjects();
+			List<SubjectDTO> subjectDTO = _subjectRepository.GetAllSubjects();
+            List<Subject> subjects = new List<Subject>();		
             foreach (var dto in subjectDTO)
             {
                 subjects.Add(new Subject(dto));
@@ -32,7 +31,14 @@ namespace MythWikiBusiness.Services
 
 		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
         {
-			SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname, date);
+            Console.WriteLine($"Service - Title: {title}");
+            Console.WriteLine($"Service - Text: {text}");
+            Console.WriteLine($"Service - EditorID: {editorid}");
+            Console.WriteLine($"Service - Image Link: {imagelink}");
+            Console.WriteLine($"Service - Author Name: {authorname}");
+            Console.WriteLine($"Service - Date: {date}");
+
+            SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname, date);
 			Subject newsubject = new Subject(newsubjectDTO);
 			return newsubject;			 
 		}
