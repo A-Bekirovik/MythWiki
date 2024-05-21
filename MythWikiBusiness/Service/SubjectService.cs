@@ -30,9 +30,9 @@ namespace MythWikiBusiness.Services
             return subjects;
 		}
 
-		public Subject CreateSubject(string title, string text) 
-		{
-			SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text);
+		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+        {
+			SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname, date);
 			Subject newsubject = new Subject(newsubjectDTO);
 			return newsubject;			 
 		}

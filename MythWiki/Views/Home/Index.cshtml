@@ -17,10 +17,33 @@
     <div>Add Subject!</div>
     <div>
         <form asp-action="AddSubject" method="post">
-            <input type="text" name="Title" placeholder="Title">
-            <input type="text" name="Text" placeholder="Text">
+            <div class="form-group">
+                <label for="Title">Title</label>
+                <input type="text" name="Title" id="Title" class="form-control" placeholder="Title" required>
+            </div>
+            <div class="form-group">
+                <label for="Text">Text</label>
+                <textarea name="Text" id="Text" class="form-control" placeholder="Text" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="EditorID">Editor ID</label>
+                <input type="number" name="EditorID" id="EditorID" class="form-control" placeholder="Editor ID" required>
+            </div>
+            <div class="form-group">
+                <label for="Image">Image Link</label>
+                <input type="text" name="Image" id="Image" class="form-control" placeholder="Image Link">
+            </div>
+            <div class="form-group">
+                <label for="Author">Author Name</label>
+                <input type="text" name="Author" id="Author" class="form-control" placeholder="Author Name" required>
+            </div>
+            <div class="form-group">
+                <label for="Date">Date</label>
+                <input type="date" name="Date" id="Date" class="form-control" required>
+            </div>
             <input type="submit" class="btn btn-outline-dark" value="Create">
         </form>
+
     </div>
 </div>
 

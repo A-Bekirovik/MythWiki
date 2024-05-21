@@ -36,25 +36,37 @@ namespace MythWikiData.Repository
         }
 
         //Create Subject
-        public SubjectDTO CreateSubject(string title, string text) 
-	    {
+        public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+        {
+            if (string.IsNullOrEmpty(title)) throw new ArgumentException("Title cannot be null or empty");
+            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");
+            if (string.IsNullOrEmpty(authorname)) throw new ArgumentException("Author name cannot be null or empty");
+
             SubjectDTO newSubject = new SubjectDTO();
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
 
-                // Generate new unique ID
                 newSubject.SubjectID = GenerateNewSubjectID();
+                newSubject.EditorID = editorid;
                 newSubject.Title = title;
                 newSubject.Text = text;
+                newSubject.Image = imagelink;
+                newSubject.Author = authorname;
+                newSubject.Date = date;
 
-                string query = "INSERT INTO Subject (SubjectID, Title, Text) VALUES (@SubjectID, @Title, @Text)";
+                string query = "INSERT INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
+                               "VALUES (@SubjectID, @Title, @Text, @EditorID, @Image, @Author, @Date)";
                 MySqlCommand command = new MySqlCommand(query, connection);
 
                 command.Parameters.AddWithValue("@SubjectID", newSubject.SubjectID);
                 command.Parameters.AddWithValue("@Title", title);
                 command.Parameters.AddWithValue("@Text", text);
+                command.Parameters.AddWithValue("@EditorID", editorid);
+                command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(imagelink) ? (object)DBNull.Value : imagelink);
+                command.Parameters.AddWithValue("@Author", authorname);
+                command.Parameters.AddWithValue("@Date", date);
 
                 command.ExecuteNonQuery();
             }

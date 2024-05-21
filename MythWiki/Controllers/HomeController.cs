@@ -6,6 +6,7 @@ using MythWikiBusiness.Services;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.DTO;
 using MythWikiData.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MythWiki.Controllers;
 
@@ -47,9 +48,9 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public ActionResult AddSubject(string title, string text)
+    public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
     {
-        subjectservice.CreateSubject(title, text);
+        subjectservice.CreateSubject(title, text, editorid, imagelink, authorname, date);
         return RedirectToAction("Index");
     }
 
