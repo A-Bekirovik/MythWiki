@@ -18,8 +18,10 @@ namespace MythWikiBusiness.Models
 
         public Subject(SubjectDTO subjectdto) 
 	    {
-	         
+            SubjectID = subjectdto.SubjectID;
+            EditorID = subjectdto.EditorID;
+            Title = subjectdto.Title;            
+            Text = subjectdto.Text;
 	    }
 	}
 }
-
