@@ -57,7 +57,7 @@ public class HomeController : Controller
         Console.WriteLine($"Received Author Name: {authorname}");
         Console.WriteLine($"Received Date: {date}");
 
-        subjectservice.CreateSubject(title, text, editorid, imagelink, authorname, date);
+        subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
         return RedirectToAction("Index");
     }
 

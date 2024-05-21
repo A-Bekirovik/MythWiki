@@ -36,17 +36,12 @@ namespace MythWikiData.Repository
         }
 
         //Create Subject
-        public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+        public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
         {
-            Console.WriteLine($"Repository - Title: {title}");
-            Console.WriteLine($"Repository - Text: {text}");
-            Console.WriteLine($"Repository - EditorID: {editorid}");
-            Console.WriteLine($"Repository - Image Link: {imagelink}");
-            Console.WriteLine($"Repository - Author Name: {authorname}");
-            Console.WriteLine($"Repository - Date: {date}");
 
             if (string.IsNullOrEmpty(title)) throw new ArgumentException("Title cannot be null or empty");
-            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");         
+            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");
+            if (string.IsNullOrEmpty(authorname)) throw new ArgumentException("Text cannot be null or empty");            
 
             SubjectDTO newSubject = new SubjectDTO();
 
@@ -60,7 +55,7 @@ namespace MythWikiData.Repository
                 newSubject.Text = text;
                 newSubject.Image = imagelink;
                 newSubject.Author = authorname;
-                newSubject.Date = date;
+                newSubject.Date = DateTime.Now;
 
                 string query = "INSERT INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
                                "VALUES (@SubjectID, @Title, @Text, @EditorID, @Image, @Author, @Date)";
@@ -72,7 +67,7 @@ namespace MythWikiData.Repository
                 command.Parameters.AddWithValue("@EditorID", editorid);
                 command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(imagelink) ? (object)DBNull.Value : imagelink);
                 command.Parameters.AddWithValue("@Author", authorname);
-                command.Parameters.AddWithValue("@Date", date);
+                command.Parameters.AddWithValue("@Date", newSubject.Date);
 
                 command.ExecuteNonQuery();
             }

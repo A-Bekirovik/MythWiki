@@ -29,16 +29,9 @@ namespace MythWikiBusiness.Services
             return subjects;
 		}
 
-		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
         {
-            Console.WriteLine($"Service - Title: {title}");
-            Console.WriteLine($"Service - Text: {text}");
-            Console.WriteLine($"Service - EditorID: {editorid}");
-            Console.WriteLine($"Service - Image Link: {imagelink}");
-            Console.WriteLine($"Service - Author Name: {authorname}");
-            Console.WriteLine($"Service - Date: {date}");
-
-            SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname, date);
+            SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname);
 			Subject newsubject = new Subject(newsubjectDTO);
 			return newsubject;			 
 		}

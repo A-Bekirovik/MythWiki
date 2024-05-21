@@ -1,0 +1,34 @@
+﻿@model SubjectViewModel
+
+@{
+    ViewData["Title"] = "AddSubject";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Voeg hier een subject toe</h1>    
+    <div>
+        <form asp-action="AddSubject" method="post">
+            <div class="form-group">
+                <label for="Title">Title</label>
+                <input type="text" name="Title" id="Title" class="form-control" placeholder="Title" required>
+            </div>
+            <div class="form-group">
+                <label for="Text">Text</label>
+                <textarea name="Text" id="Text" class="form-control" placeholder="Text" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="EditorID">Editor ID</label>
+                <input type="number" name="EditorID" id="EditorID" class="form-control" placeholder="Editor ID" required>
+            </div>
+            <div class="form-group">
+                <label for="Image">Image Link</label>
+                <input type="text" name="Image" id="Image" class="form-control" placeholder="Image Link">
+            </div>
+            <div class="form-group">
+                <label for="Author">Author Name</label>
+                <input type="text" name="authorname" id="Author" class="form-control" placeholder="Author Name" required>
+            </div>
+            <input type="submit" class="btn btn-outline-dark" value="Create">
+        </form>
+    </div>
+
