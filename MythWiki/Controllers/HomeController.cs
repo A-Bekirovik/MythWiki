@@ -47,25 +47,10 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public ActionResult AddSubject(Subject newsubject)
-    {        
-        string title = newsubject.Title;
-        string Text = newsubject.Text;
-        string image = newsubject.Image;
-        DateTime date = newsubject.Date;
-
-        if (newsubject != null && !string.IsNullOrEmpty(newsubject.Title) && !string.IsNullOrEmpty(newsubject.Text) && !string.IsNullOrEmpty(newsubject.Image) && newsubject.Date != DateTime.MinValue)
-        {
-            subjectlist.Add(newsubject);
-
-            return RedirectToAction("Index", "Home");
-        }
-        else
-        {
-
-            ModelState.AddModelError("", "Please fill in all the required fields.");
-            return View();
-        }
+    public ActionResult AddSubject(string title, string text)
+    {
+        subjectservice.CreateSubject(title, text);
+        return RedirectToAction("Index");
     }
 
     [HttpGet]

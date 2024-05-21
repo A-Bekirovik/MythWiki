@@ -38,29 +38,50 @@ namespace MythWikiData.Repository
         //Create Subject
         public SubjectDTO CreateSubject(string title, string text) 
 	    {
-            SubjectDTO newsubject = new SubjectDTO();
+            SubjectDTO newSubject = new SubjectDTO();
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
 
-                string query = "INSERT INTO Subject (Title, Text) VALUES (@Title, @Text)";
+                // Generate new unique ID
+                newSubject.SubjectID = GenerateNewSubjectID();
+                newSubject.Title = title;
+                newSubject.Text = text;
+
+                string query = "INSERT INTO Subject (SubjectID, Title, Text) VALUES (@SubjectID, @Title, @Text)";
                 MySqlCommand command = new MySqlCommand(query, connection);
 
-
+                command.Parameters.AddWithValue("@SubjectID", newSubject.SubjectID);
                 command.Parameters.AddWithValue("@Title", title);
                 command.Parameters.AddWithValue("@Text", text);
 
-
                 command.ExecuteNonQuery();
-
-
-                newsubject.SubjectID = (int)command.LastInsertedId;
-                newsubject.Title = title;
-                newsubject.Text = text;
-
-                return newsubject;
             }
+
+            return newSubject;
+        }
+
+        // Generate SubjectID
+        private int GenerateNewSubjectID()
+        {
+            int newID = 1; 
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT MAX(SubjectID) FROM Subject";
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                object result = command.ExecuteScalar();
+                if (result != DBNull.Value)
+                {
+                    newID = Convert.ToInt32(result) + 1;
+                }
+            }
+
+            return newID;
         }
 
         //Delete Subject

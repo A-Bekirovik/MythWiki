@@ -13,6 +13,14 @@
 		            <p>@subject.Title</p>            
 		        </article> 
 	        }
+    </div>   
+    <div>Add Subject!</div>
+    <div>
+        <form asp-action="AddSubject" method="post">
+            <input type="text" name="Title" placeholder="Title">
+            <input type="text" name="Text" placeholder="Text">
+            <input type="submit" class="btn btn-outline-dark" value="Create">
+        </form>
     </div>
 </div>
 
