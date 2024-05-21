@@ -1,7 +1,7 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
-using MythWikiData.DTO;
 
 namespace MythWikiData.Repository
 {
@@ -35,6 +35,7 @@ namespace MythWikiData.Repository
             return subjects;
         }
 
+        //Create Subject
         public SubjectDTO CreateSubject(string title, string text) 
 	    {
             SubjectDTO newsubject = new SubjectDTO();
@@ -43,24 +44,46 @@ namespace MythWikiData.Repository
             {
                 connection.Open();
 
-                MySqlCommand command = new MySqlCommand("INSERT INTO Subject (Title, Text) VALUES (@Title, @Text)", connection);
-                MySqlDataReader reader = command.ExecuteReader();
+                string query = "INSERT INTO Subject (Title, Text) VALUES (@Title, @Text)";
+                MySqlCommand command = new MySqlCommand(query, connection);
 
-                while (reader.Read())
-                {
-                    SubjectDTO subject = new SubjectDTO
-                    {
-                        SubjectID = Convert.ToInt16(reader["SubjectID"]),
-                        Title = reader["Title"].ToString(),
-                        Text = reader["Text"].ToString()
-                    };
-                    subject = newsubject;
-                }
-                reader.Close();
+
+                command.Parameters.AddWithValue("@Title", title);
+                command.Parameters.AddWithValue("@Text", text);
+
+
+                command.ExecuteNonQuery();
+
+
+                newsubject.SubjectID = (int)command.LastInsertedId;
+                newsubject.Title = title;
+                newsubject.Text = text;
+
+                return newsubject;
+            }
+        }
+
+        //Delete Subject
+        public bool DeleteSubject(int subjectID)
+        {
+            bool isDeleted = false;
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "DELETE FROM Subject WHERE SubjectID = @SubjectID";
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@SubjectID", subjectID);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                isDeleted = rowsAffected > 0;
             }
 
-            return newsubject;
-        } 
+            return isDeleted;
+        }
     }
 }
 

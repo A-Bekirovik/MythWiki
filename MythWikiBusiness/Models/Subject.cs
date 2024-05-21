@@ -1,4 +1,5 @@
 ﻿using System;
+using MythWikiBusiness.DTO;
 namespace MythWikiBusiness.Models
 {
 	public class Subject
@@ -14,6 +15,11 @@ namespace MythWikiBusiness.Models
         public Subject()
 		{
 		}
+
+        public Subject(SubjectDTO subjectdto) 
+	    {
+	         
+	    }
 	}
 }
 

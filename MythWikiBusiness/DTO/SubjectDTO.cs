@@ -1,5 +1,7 @@
 ﻿using System;
-namespace MythWikiData.DTO
+using MythWikiBusiness.Models;
+
+namespace MythWikiBusiness.DTO
 {
 	public class SubjectDTO
 	{

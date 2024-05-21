@@ -1,4 +1,6 @@
 ﻿using System;
+using MythWikiBusiness.Models;
+
 namespace MythWiki.Models
 {
 	public class SubjectViewModel
@@ -9,11 +11,6 @@ namespace MythWiki.Models
         public string Image { get;  set; }
         public DateTime Date { get;  set; }
         public string Authors { get;  set; }
-
-        public SubjectViewModel()
-        {
-
-		}
 	}
 }
 

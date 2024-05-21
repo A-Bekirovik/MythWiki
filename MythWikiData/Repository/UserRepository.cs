@@ -7,7 +7,6 @@ namespace MythWikiData.Repository
 {
 	public class UserRepository : IUserRepo
 	{
-
         private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
 
         public List<UserDTO> GetAllUsers()

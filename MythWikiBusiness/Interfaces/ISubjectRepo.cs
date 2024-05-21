@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using MythWikiBusiness.Models;
 using MythWikiBusiness.DTO;
-using MythWikiData.DTO;
 
 namespace MythWikiBusiness.IRepository
 {
