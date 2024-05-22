@@ -63,7 +63,12 @@ public class HomeController : Controller
     [HttpPost]
     public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
     {
-        subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
+        var response = subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
+
+        if(!response.Succes) 
+	    {
+            TempData["Errormessage"] = response.ErrorMessage; 
+	    }
         return RedirectToAction("Index");
     }
 

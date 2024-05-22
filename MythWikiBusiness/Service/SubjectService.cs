@@ -4,6 +4,7 @@ using System.Linq;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.Models;
+using MythWikiBusiness.ErrorHandling;
 
 namespace MythWikiBusiness.Services
 {
@@ -29,11 +30,27 @@ namespace MythWikiBusiness.Services
             return subjects;
 		}
 
-		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
+		public ServiceReponse CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
         {
-            SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname);
-			Subject newsubject = new Subject(newsubjectDTO);
-			return newsubject;			 
+            ServiceReponse response = new ServiceReponse { Succes = false };
+
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
+            {
+                response.ErrorMessage = "Title and Text need to be filled!";
+                return response;
+            }
+
+            try
+            {
+                SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname);
+                Subject newsubject = new Subject(newsubjectDTO);
+                response.Succes = true;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = ex.Message;
+            }
+            return response;		 
 		}
 
         public Subject GetSubjectById(int id)
@@ -52,4 +69,3 @@ namespace MythWikiBusiness.Services
         }
     }
 }
-

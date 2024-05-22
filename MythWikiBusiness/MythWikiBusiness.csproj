@@ -11,11 +11,13 @@
     <None Remove="Models\" />
     <None Remove="DTO\" />
     <None Remove="Interfaces\" />
+    <None Remove="ErrorHandling\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\" />
     <Folder Include="Models\" />
     <Folder Include="DTO\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="ErrorHandling\" />
   </ItemGroup>
 </Project>

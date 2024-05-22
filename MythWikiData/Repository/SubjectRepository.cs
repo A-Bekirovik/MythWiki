@@ -37,11 +37,7 @@ namespace MythWikiData.Repository
 
         //Create Subject
         public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
-        {
-
-            if (string.IsNullOrEmpty(title)) throw new ArgumentException("Title cannot be null or empty");
-            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");          
-
+        {        
             SubjectDTO newSubject = new SubjectDTO();
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
