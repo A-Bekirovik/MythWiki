@@ -29,11 +29,8 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         SubjectViewModel subjectviewmodel = new SubjectViewModel();
-        UserViewModel userviewmodel = new UserViewModel();
         List<Subject> subjects = subjectservice.GetAllSubjects();
-        List<User> users = userservice.GetAllUsers();
         subjectviewmodel.subjectlist = subjects;   
-        userviewmodel.userlist = users;
         return View(subjectviewmodel);
     }
 
@@ -59,29 +56,13 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult DeleteSubject(int subjectID)
     {
-        bool isDeleted = subjectservice.DeleteSubject(subjectID);
-        if (isDeleted)
-        {
-            TempData["Message"] = "Subject successfully deleted.";
-        }
-        else
-        {
-            TempData["Message"] = "Subject not found.";
-        }
-
+        subjectservice.DeleteSubject(subjectID);
         return RedirectToAction("Index");
     }
 
     [HttpPost]
     public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
     {
-        Console.WriteLine($"Received Title: {title}");
-        Console.WriteLine($"Received Text: {text}");
-        Console.WriteLine($"Received EditorID: {editorid}");
-        Console.WriteLine($"Received Image Link: {imagelink}");
-        Console.WriteLine($"Received Author Name: {authorname}");
-        Console.WriteLine($"Received Date: {date}");
-
         subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
         return RedirectToAction("Index");
     }
@@ -95,15 +76,6 @@ public class HomeController : Controller
     public IActionResult RemoveSubject() 
     {
         return View(); 
-    }
-
-    public IActionResult ShowList()
-    {
-        foreach (var subject in subjectlist)
-        {
-            Console.WriteLine(subject);
-        }
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

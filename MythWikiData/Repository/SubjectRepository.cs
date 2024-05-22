@@ -40,8 +40,7 @@ namespace MythWikiData.Repository
         {
 
             if (string.IsNullOrEmpty(title)) throw new ArgumentException("Title cannot be null or empty");
-            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");
-            if (string.IsNullOrEmpty(authorname)) throw new ArgumentException("Text cannot be null or empty");            
+            if (string.IsNullOrEmpty(text)) throw new ArgumentException("Text cannot be null or empty");          
 
             SubjectDTO newSubject = new SubjectDTO();
 
