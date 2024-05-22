@@ -6,6 +6,7 @@ using MythWikiBusiness.Services;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.DTO;
 using MythWikiData.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MythWiki.Controllers;
 
@@ -15,52 +16,55 @@ public class HomeController : Controller
 
     private readonly ILogger<HomeController> _logger;
     private readonly UserService userservice;
+    private readonly SubjectService subjectservice;
 
     private List<Subject> subjectlist = new List<Subject>();
 
     public HomeController()
     {
         userservice = new UserService(new UserRepository());
+        subjectservice = new SubjectService(new SubjectRepository());
     }
 
     public IActionResult Index()
     {
-        UserViewModel userviewmodel = new UserViewModel();
-        List<User> users = userservice.GetAllUsers();   
-        userviewmodel.userlist = users;
-        return View(userviewmodel);
+        SubjectViewModel subjectviewmodel = new SubjectViewModel();
+        List<Subject> subjects = subjectservice.GetAllSubjects();
+        subjectviewmodel.subjectlist = subjects;   
+        return View(subjectviewmodel);
     }
 
     public IActionResult Privacy()
     {
         return View();
     }
+    public IActionResult Subject(int id)
+    {
+        var subject = subjectservice.GetSubjectById(id);
+        if (subject == null)
+        {
+            return NotFound();
+        }
+        return View(subject);
+    }
 
-        public IActionResult Subject()
+    public IActionResult DeleteSubject()
     {
         return View();
     }
 
     [HttpPost]
-    public ActionResult AddSubject(Subject newsubject)
-    {        
-        string title = newsubject.Title;
-        string Text = newsubject.Text;
-        string image = newsubject.Image;
-        DateTime date = newsubject.Date;
+    public IActionResult DeleteSubject(int subjectID)
+    {
+        subjectservice.DeleteSubject(subjectID);
+        return RedirectToAction("Index");
+    }
 
-        if (newsubject != null && !string.IsNullOrEmpty(newsubject.Title) && !string.IsNullOrEmpty(newsubject.Text) && !string.IsNullOrEmpty(newsubject.Image) && newsubject.Date != DateTime.MinValue)
-        {
-            subjectlist.Add(newsubject);
-
-            return RedirectToAction("Index", "Home");
-        }
-        else
-        {
-
-            ModelState.AddModelError("", "Please fill in all the required fields.");
-            return View();
-        }
+    [HttpPost]
+    public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
+    {
+        subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
+        return RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -72,15 +76,6 @@ public class HomeController : Controller
     public IActionResult RemoveSubject() 
     {
         return View(); 
-    }
-
-    public IActionResult ShowList()
-    {
-        foreach (var subject in subjectlist)
-        {
-            Console.WriteLine(subject);
-        }
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

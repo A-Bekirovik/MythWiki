@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using MythWikiBusiness.Models;
 using MythWikiBusiness.DTO;
-using MythWikiData.DTO;
 
 namespace MythWikiBusiness.IRepository
 {
 	public interface ISubjectRepo
 	{
 		List<SubjectDTO> GetAllSubjects();
-	}
+        SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname);
+        SubjectDTO GetSubjectById(int id);
+        bool DeleteSubject(int subjectID);
+    }
 }
 

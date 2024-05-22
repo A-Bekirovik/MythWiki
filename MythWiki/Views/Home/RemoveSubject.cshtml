@@ -1,0 +1,19 @@
+﻿@model SubjectViewModel
+
+@{
+    ViewData["Title"] = "Delete Subject";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Verwijder een subject door ID in te voeren</h1>
+    <div>
+        <form asp-action="DeleteSubject" method="post">
+            <div class="form-group">
+                <label for="SubjectID">Subject ID</label>
+                <input type="number" name="SubjectID" id="SubjectID" class="form-control" placeholder="Enter Subject ID" required>
+            </div>
+
+            <input type="submit" class="btn btn-outline-dark" value="Delete">
+        </form>
+    </div>
+</div>
