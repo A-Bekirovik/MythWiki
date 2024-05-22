@@ -73,6 +73,29 @@ public class HomeController : Controller
     }
 
     [HttpGet]
+    public IActionResult EditSubject(int id)
+    {
+        var subject = subjectservice.GetSubjectById(id);
+        if (subject == null)
+        {
+            return NotFound();
+        }
+        return View(subject);
+    }
+
+    [HttpPost]
+    public IActionResult EditSubject(int subjectID, string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+    {
+        var response = subjectservice.EditSubject(subjectID, title, text, editorid, imagelink, authorname, date);
+        if (!response.Succes)
+        {
+            TempData["ErrorMessage"] = response.ErrorMessage;
+            return RedirectToAction("EditSubject", new { id = subjectID });
+        }
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
     public IActionResult AddSubject()
     {
         return View();

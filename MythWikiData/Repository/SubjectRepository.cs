@@ -92,6 +92,29 @@ namespace MythWikiData.Repository
             return newID;
         }
 
+        //Edit Subject
+        public bool EditSubject(SubjectDTO subject)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "UPDATE Subject SET Title = @Title, Text = @Text, EditorID = @EditorID, Image = @Image, Author = @Author, Date = @Date WHERE SubjectID = @SubjectID";
+                MySqlCommand command = new MySqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@Title", subject.Title);
+                command.Parameters.AddWithValue("@Text", subject.Text);
+                command.Parameters.AddWithValue("@EditorID", subject.EditorID);
+                command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
+                command.Parameters.AddWithValue("@Author", subject.Author);
+                command.Parameters.AddWithValue("@Date", subject.Date);
+                command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
+
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
         //Delete Subject
         public bool DeleteSubject(int subjectID)
         {
