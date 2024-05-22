@@ -61,7 +61,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+    public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
     {
         subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
         return RedirectToAction("Index");
