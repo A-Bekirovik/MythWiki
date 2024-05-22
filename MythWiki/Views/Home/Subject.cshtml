@@ -2,19 +2,32 @@
 
 @{
     ViewData["Title"] = "Subject Details";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
+<div class="container my-5">
     <h1 class="display-4">@Model.Title</h1>
-    <p>Author: @Model.Author</p>
-    <p>Date: @Model.Date.ToString("MM/dd/yyyy")</p>
-    <p>@Model.Text</p>
-    @if (!string.IsNullOrEmpty(@Model.Image))
-    {
-        <img src="@Model.Image" alt="Subject Image" class="img-fluid" />
-    }
-</div>
-
-<div class="text-center">
-    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">@Model.Text</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="@Model.Image" class="card-img-top" alt="Afbeelding">
+                <div class="card-body">
+                    <p class="card-text">Info over afbeelding</p>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Other Chats</h5>
+                    <p class="card-text">Chatbar</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
