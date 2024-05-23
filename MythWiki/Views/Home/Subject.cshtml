@@ -1,7 +1,7 @@
 ﻿@model MythWikiBusiness.Models.Subject
 
 @{
-    ViewData["Title"] = "Subject Details";
+    ViewData["Title"] = "Subject Details";    
 }
 
 <div class="container my-5">
@@ -12,14 +12,14 @@
                 <div class="card-body">
                     <p class="card-text">@Model.Text</p>
                 </div>
-                <div class="card-footer">
-                    <a class="Button">Privacy</a>
-		        </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card mb-4">
                 <img src="@Model.Image" class="card-img-top" alt="Afbeelding">
+                <div class="card-body">
+                    <p class="card-text">Info over afbeelding</p>
+                </div>
             </div>
             <div class="card mb-4">
                 <div class="card-body">
@@ -28,5 +28,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="mt-4">
+        <a asp-action="EditSubject" asp-route-id="@Model.SubjectID" class="btn btn-primary">Edit</a>
     </div>
 </div>

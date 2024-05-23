@@ -6,7 +6,7 @@ using MythWikiBusiness.Services;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.DTO;
 using MythWikiData.Repository;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using MythWikiBusiness.ErrorHandling;
 
 namespace MythWiki.Controllers;
 
@@ -40,12 +40,20 @@ public class HomeController : Controller
     }
     public IActionResult Subject(int id)
     {
-        var subject = subjectservice.GetSubjectById(id);
-        if (subject == null)
+        var response = subjectservice.GetSubjectById(id);
+
+        if (response == null)
         {
             return NotFound();
         }
-        return View(subject);
+
+        if (!response.Succes)
+        {
+            TempData["ErrorMessage"] = response.ErrorMessage;
+            return RedirectToAction("Index");
+        }
+
+        return View(response.Data); // This needs a subject
     }
 
     public IActionResult DeleteSubject()
@@ -56,19 +64,76 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult DeleteSubject(int subjectID)
     {
-        subjectservice.DeleteSubject(subjectID);
+        try 
+	    {
+            var subject = subjectservice.DeleteSubject(subjectID);
+        }
+        catch(DatabaseError dbex) 
+	    {
+            TempData["ErrorMessage"] = dbex;
+            return RedirectToAction("RemoveSubject");
+        }
+        catch (SubjectError sex) 
+	    {
+            TempData["ErrorMessage"] = sex;
+            return RedirectToAction("RemoveSubject");
+        }
         return RedirectToAction("Index");
     }
 
     [HttpPost]
-    public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
+    public IActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
     {
         var response = subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
 
-        if(!response.Succes) 
-	    {
-            TempData["Errormessage"] = response.ErrorMessage; 
+        try 
+	    { 
 	    }
+        catch(DatabaseError dbex) 
+	    {
+            TempData["Errormessage"] = dbex;
+            return RedirectToAction("AddSubject");
+        }
+        catch (SubjectError sex) 
+	    {
+            TempData["Errormessage"] = sex;
+            return RedirectToAction("AddSubject");
+        }
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult EditSubject(int id)
+    {
+        var response = subjectservice.GetSubjectById(id);
+
+        if (response == null)
+        {
+            return NotFound();
+        }
+        return View(response.Data);
+    }
+
+    [HttpPost]
+    public IActionResult EditSubject(int subjectID, string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+    {
+        var subjectDTO = new SubjectDTO
+        {
+            SubjectID = subjectID,
+            Title = title,
+            Text = text,
+            EditorID = editorid,
+            Image = imagelink,
+            Author = authorname,
+            Date = DateTime.Now
+        };
+
+        var response = subjectservice.EditSubject(subjectDTO);
+        if (!response.Succes)
+        {
+            TempData["ErrorMessage"] = response.ErrorMessage;
+            return RedirectToAction("EditSubject", new { id = subjectID });
+        }
         return RedirectToAction("Index");
     }
 
@@ -83,10 +148,9 @@ public class HomeController : Controller
         return View(); 
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error() 
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(); 
     }
 }
 
