@@ -6,7 +6,6 @@ using MythWikiBusiness.Services;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.DTO;
 using MythWikiData.Repository;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MythWiki.Controllers;
 
@@ -40,12 +39,20 @@ public class HomeController : Controller
     }
     public IActionResult Subject(int id)
     {
-        var subject = subjectservice.GetSubjectById(id);
-        if (subject == null)
+        var response = subjectservice.GetSubjectById(id);
+
+        if (response == null)
         {
             return NotFound();
         }
-        return View(subject);
+
+        if (!response.Succes)
+        {
+            TempData["ErrorMessage"] = response.ErrorMessage;
+            return RedirectToAction("Index");
+        }
+
+        return View(response.Data); // This needs a subject
     }
 
     public IActionResult DeleteSubject()
@@ -83,12 +90,13 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult EditSubject(int id)
     {
-        var subject = subjectservice.GetSubjectById(id);
-        if (subject == null)
+        var response = subjectservice.GetSubjectById(id);
+
+        if (response == null)
         {
             return NotFound();
         }
-        return View(subject);
+        return View(response.Data);
     }
 
     [HttpPost]

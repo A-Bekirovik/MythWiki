@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Linq;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.Models;
@@ -48,24 +47,50 @@ namespace MythWikiBusiness.Services
                 Subject newsubject = new Subject(newsubjectDTO);
                 response.Succes = true;
             }
-            catch (Exception ex)
+            catch (DatabaseError dbex)
             {
-                response.ErrorMessage = ex.Message;
+                response.ErrorMessage = dbex.Message;
             }
             return response;		 
 		}
 
         //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
-        public Subject GetSubjectById(int id)
+        public ServiceResponse GetSubjectById(int id)
         {
-            var subjectDTO = _subjectRepository.GetSubjectById(id);
-            if (subjectDTO == null)
+            var response = new ServiceResponse { Succes = false };
+
+            if (id <= 0)
             {
-                return null;
+                response.ErrorMessage = "Invalid subject ID.";
+                return response;
             }
-            return new Subject(subjectDTO);
+
+            try
+            {
+                var subjectDTO = _subjectRepository.GetSubjectById(id);
+
+                if (subjectDTO != null)
+                {
+                    var foundSubject = new Subject(subjectDTO);
+                    response.Succes = true;
+                    response.ErrorMessage = "An error occurred while finding the subject.";
+                    response.Data = foundSubject; // View requires a Subject, So i need temp data to transfer the subject.
+                }
+                else
+                {
+                    response.ErrorMessage = "Subject not found.";
+                }
+            }
+            catch (DatabaseError dbex)
+            {
+                response.ErrorMessage = dbex.Message;
+            }
+
+            return response;
         }
 
+
+        // Added Errorhandling and restrictions
         public ServiceResponse EditSubject(SubjectDTO subjectDTO)
         {
             var response = new ServiceResponse { Succes = false };
@@ -89,17 +114,16 @@ namespace MythWikiBusiness.Services
                     response.ErrorMessage = "Failed to update the subject.";
                 }
             }
-            catch (Exception ex)
+            catch (DatabaseError dbex)
             {
-                Console.WriteLine($"Exception occurred while updating subject: {ex.Message}");
-                response.ErrorMessage = "An error occurred while updating the subject.";
+                response.ErrorMessage = dbex.Message;
             }
 
             return response;
         }
 
 
-
+        // Added Errorhandling and restrictions
         public ServiceResponse DeleteSubject(int subjectID)
         {
             var response = new ServiceResponse { Succes = false };
@@ -129,6 +153,10 @@ namespace MythWikiBusiness.Services
                     response.ErrorMessage = "Failed to delete the subject.";
                 }
             }
+            catch(DatabaseError dbex) 
+	        {
+                response.ErrorMessage = dbex.Message;
+	        }
             catch (Exception ex)
             {
                 Console.WriteLine($"Exception occurred while deleting subject: {ex.Message}");
@@ -137,6 +165,5 @@ namespace MythWikiBusiness.Services
 
             return response;
         }
-        //return _subjectRepository.DeleteSubject(subjectID);
     }    
 }

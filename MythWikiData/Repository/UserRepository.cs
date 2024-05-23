@@ -1,6 +1,7 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
+using MythWikiBusiness.ErrorHandling;
 using MythWikiBusiness.IRepository;
 
 namespace MythWikiData.Repository
@@ -12,24 +13,30 @@ namespace MythWikiData.Repository
         public List<UserDTO> GetAllUsers()
         {
             List<UserDTO> users = new List<UserDTO>();
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                MySqlCommand command = new MySqlCommand("SELECT * FROM User", connection);
-                MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
+            try 
+	        {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    UserDTO user = new UserDTO
+                    connection.Open();
+
+                    MySqlCommand command = new MySqlCommand("SELECT * FROM User", connection);
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        Name = reader["Name"].ToString(),
-                        UserID = Convert.ToInt32(reader["UserID"])
-                    };
-                    users.Add(user);
+                        UserDTO user = new UserDTO
+                        {
+                            Name = reader["Name"].ToString(),
+                            UserID = Convert.ToInt32(reader["UserID"])
+                        };
+                        users.Add(user);
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                throw new DatabaseError("Database got an error", ex);
             }
             return users;
         }
