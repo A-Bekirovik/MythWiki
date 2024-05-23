@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
+using MythWikiBusiness.ErrorHandling;
 
 namespace MythWikiData.Repository
 {
@@ -9,10 +10,13 @@ namespace MythWikiData.Repository
 	{
         private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
 
+        //Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
         {
             List<SubjectDTO> subjects = new List<SubjectDTO>();
 
+        try 
+	    {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
@@ -32,6 +36,12 @@ namespace MythWikiData.Repository
                 }
                 reader.Close();
             }
+        }
+
+        catch (MySqlException ex)
+        {
+            throw new DatabaseError("Database got an error", ex);
+        }            
             return subjects;
         }
 

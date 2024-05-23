@@ -100,9 +100,43 @@ namespace MythWikiBusiness.Services
 
 
 
-        public bool DeleteSubject(int subjectID)
+        public ServiceResponse DeleteSubject(int subjectID)
         {
-            return _subjectRepository.DeleteSubject(subjectID);
+            var response = new ServiceResponse { Succes = false };
+
+            if (subjectID <= 0)
+            {
+                response.ErrorMessage = "Invalid subject ID.";
+                return response;
+            }
+
+            try
+            {
+                var existingSubject = _subjectRepository.GetSubjectById(subjectID);
+                if (existingSubject == null)
+                {
+                    response.ErrorMessage = "Subject doesn't exist.";
+                    return response;
+                }
+
+                var isDeleted = _subjectRepository.DeleteSubject(subjectID);
+                if (isDeleted)
+                {
+                    response.Succes = true;
+                }
+                else
+                {
+                    response.ErrorMessage = "Failed to delete the subject.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred while deleting subject: {ex.Message}");
+                response.ErrorMessage = "An error occurred while deleting the subject.";
+            }
+
+            return response;
         }
-    }
+        //return _subjectRepository.DeleteSubject(subjectID);
+    }    
 }

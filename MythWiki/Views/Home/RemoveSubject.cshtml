@@ -4,6 +4,13 @@
     ViewData["Title"] = "Delete Subject";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="text-center">
     <h1 class="display-4">Verwijder een subject door ID in te voeren</h1>
     <div>

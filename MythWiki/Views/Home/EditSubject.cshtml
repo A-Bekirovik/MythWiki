@@ -17,15 +17,15 @@
             <input type="hidden" name="SubjectID" value="@Model.SubjectID" />
             <div class="form-group">
                 <label for="Title">Title</label>
-                <input type="text" name="title" id="Title" class="form-control" placeholder="Title" value="@Model.Title" required>
+                <input type="text" name="title" id="Title" class="form-control" placeholder="Title" value="@Model.Title" >
             </div>
             <div class="form-group">
                 <label for="Text">Text</label>
-                <textarea name="text" id="Text" class="form-control" placeholder="Text" required>@Model.Text</textarea>
+                <textarea name="text" id="Text" class="form-control" placeholder="Text" >@Model.Text</textarea>
             </div>
             <div class="form-group">
                 <label for="EditorID">Editor ID</label>
-                <input type="number" name="editorid" id="EditorID" class="form-control" placeholder="Editor ID" value="@Model.EditorID" required>
+                <input type="number" name="editorid" id="EditorID" class="form-control" placeholder="Editor ID" value="@Model.EditorID" >
             </div>
             <div class="form-group">
                 <label for="Image">Image Link</label>
@@ -33,11 +33,7 @@
             </div>
             <div class="form-group">
                 <label for="Author">Author Name</label>
-                <input type="text" name="authorname" id="Author" class="form-control" placeholder="Author Name" value="@Model.Author" required>
-            </div>
-            <div class="form-group">
-                <label for="Date">Date</label>
-                <input type="date" name="date" id="Date" class="form-control" value="@Model.Date.ToString("yyyy-MM-dd")" required>
+                <input type="text" name="authorname" id="Author" class="form-control" placeholder="Author Name" value="@Model.Author" >
             </div>
             <input type="submit" class="btn btn-outline-dark" value="Save Changes">
         </form>

@@ -4,8 +4,15 @@
     ViewData["Title"] = "AddSubject";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="text-center">
-    <h1 class="display-4">Voeg hier een subject toe</h1>    
+    <h1 class="display-4">Voeg hier een subject toe</h1>
     <div>
         <form asp-action="AddSubject" method="post">
             <div class="form-group">

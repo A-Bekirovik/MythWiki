@@ -1,11 +1,8 @@
 ﻿using System;
 namespace MythWikiBusiness.ErrorHandling
 {
-	public class DatabaseError
+	public class DatabaseError : Exception
 	{
-		public DatabaseError()
-		{
-		}
+		public DatabaseError(string message, Exception exception) { }
 	}
 }
-

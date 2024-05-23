@@ -56,18 +56,26 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult DeleteSubject(int subjectID)
     {
-        subjectservice.DeleteSubject(subjectID);
+        var response = subjectservice.DeleteSubject(subjectID);
+
+        if (!response.Succes)
+        {
+            TempData["ErrorMessage"] = response.ErrorMessage;
+            return RedirectToAction("RemoveSubject");
+        }
+
         return RedirectToAction("Index");
     }
 
     [HttpPost]
-    public ActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
+    public IActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
     {
         var response = subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
 
         if(!response.Succes) 
 	    {
-            TempData["Errormessage"] = response.ErrorMessage; 
+            TempData["Errormessage"] = response.ErrorMessage;
+            return RedirectToAction("AddSubject"); 
 	    }
         return RedirectToAction("Index");
     }
@@ -86,7 +94,18 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult EditSubject(int subjectID, string title, string text, int editorid, string imagelink, string authorname, DateTime date)
     {
-        var response = subjectservice.EditSubject(subjectID, title, text, editorid, imagelink, authorname, date);
+        var subjectDTO = new SubjectDTO
+        {
+            SubjectID = subjectID,
+            Title = title,
+            Text = text,
+            EditorID = editorid,
+            Image = imagelink,
+            Author = authorname,
+            Date = DateTime.Now
+        };
+
+        var response = subjectservice.EditSubject(subjectDTO);
         if (!response.Succes)
         {
             TempData["ErrorMessage"] = response.ErrorMessage;
@@ -106,10 +125,9 @@ public class HomeController : Controller
         return View(); 
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error() 
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(); 
     }
 }
 
