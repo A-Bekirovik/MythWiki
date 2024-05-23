@@ -6,6 +6,7 @@ using MythWikiBusiness.Services;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.DTO;
 using MythWikiData.Repository;
+using MythWikiBusiness.ErrorHandling;
 
 namespace MythWiki.Controllers;
 
@@ -63,14 +64,20 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult DeleteSubject(int subjectID)
     {
-        var response = subjectservice.DeleteSubject(subjectID);
-
-        if (!response.Succes)
-        {
-            TempData["ErrorMessage"] = response.ErrorMessage;
+        try 
+	    {
+            var subject = subjectservice.DeleteSubject(subjectID);
+        }
+        catch(DatabaseError dbex) 
+	    {
+            TempData["ErrorMessage"] = dbex;
             return RedirectToAction("RemoveSubject");
         }
-
+        catch (SubjectError sex) 
+	    {
+            TempData["ErrorMessage"] = sex;
+            return RedirectToAction("RemoveSubject");
+        }
         return RedirectToAction("Index");
     }
 
@@ -79,11 +86,19 @@ public class HomeController : Controller
     {
         var response = subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
 
-        if(!response.Succes) 
-	    {
-            TempData["Errormessage"] = response.ErrorMessage;
-            return RedirectToAction("AddSubject"); 
+        try 
+	    { 
 	    }
+        catch(DatabaseError dbex) 
+	    {
+            TempData["Errormessage"] = dbex;
+            return RedirectToAction("AddSubject");
+        }
+        catch (SubjectError sex) 
+	    {
+            TempData["Errormessage"] = sex;
+            return RedirectToAction("AddSubject");
+        }
         return RedirectToAction("Index");
     }
 

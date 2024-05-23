@@ -31,27 +31,27 @@ namespace MythWikiBusiness.Services
 		}
 
         // ErrorHandling: Restrictions on what are needed to Create subject, Created Errorhandling in case Restriction.
-		public ServiceResponse CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
+		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
         {
-            ServiceResponse response = new ServiceResponse { Succes = false };
-
-            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
-            {
-                response.ErrorMessage = "Title and Text need to be filled!";
-                return response;
-            }
-
             try
             {
+                if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
+                {
+                    throw new ArgumentException("Title and Text need to be Filled!");
+                }
+
                 SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname);
                 Subject newsubject = new Subject(newsubjectDTO);
-                response.Succes = true;
+                return newsubject;
             }
             catch (DatabaseError dbex)
             {
-                response.ErrorMessage = dbex.Message;
+                throw new DatabaseError("Cant create new subject due to Database", dbex);
             }
-            return response;		 
+	        catch (ArgumentException argex) 
+	        {
+                throw new SubjectError("Cant create new subject due to Service", argex);
+	        }		 
 		}
 
         //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
@@ -124,7 +124,7 @@ namespace MythWikiBusiness.Services
 
 
         // Added Errorhandling and restrictions
-        public ServiceResponse DeleteSubject(int subjectID)
+        public bool DeleteSubject(int subjectID)
         {
             var response = new ServiceResponse { Succes = false };
 
