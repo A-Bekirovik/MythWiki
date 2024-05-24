@@ -97,28 +97,23 @@ namespace MythWikiBusiness.Services
 
 
         // Added Errorhandling and restrictions
-        public ServiceResponse EditSubject(SubjectDTO subjectDTO)
+        public Subject EditSubject(SubjectDTO subjectDTO)
         {
-            var response = new ServiceResponse { Succes = false };
-
             if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
             {
-                response.ErrorMessage = "Title and Text need to be filled!";
-                return response;
+                throw new ArgumentException("Title and Text need to be filled!");
             }
 
             try
             {
                 var isUpdated = _subjectRepository.EditSubject(subjectDTO);
-                if (isUpdated)
+                if (!isUpdated)
                 {
-                    var updatedSubject = new Subject(subjectDTO);
-                    response.Succes = true;
+                    throw new ArgumentException("Failed to update the subject.");
                 }
-                else
-                {
-                    response.ErrorMessage = "Failed to update the subject.";
-                }
+
+                var updatedSubject = new Subject(subjectDTO);
+                return updatedSubject;
             }
             catch (DatabaseError dbex)
             {
@@ -128,8 +123,6 @@ namespace MythWikiBusiness.Services
             {
                 throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
             }
-
-            return response;
         }
 
 

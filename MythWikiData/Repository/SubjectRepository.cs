@@ -132,7 +132,7 @@ namespace MythWikiData.Repository
                     command.Parameters.AddWithValue("@EditorID", subject.EditorID);
                     command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
                     command.Parameters.AddWithValue("@Author", subject.Author);
-                    command.Parameters.AddWithValue("@Date", subject.Date);
+                    command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
 
                     int rowsAffected = command.ExecuteNonQuery();
