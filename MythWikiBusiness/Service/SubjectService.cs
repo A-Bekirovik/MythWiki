@@ -66,31 +66,24 @@ namespace MythWikiBusiness.Services
 		}
 
         //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
-        public ServiceResponse GetSubjectById(int id)
+        public Subject GetSubjectById(int id)
         {
-            var response = new ServiceResponse { Succes = false };
-
             if (id <= 0)
             {
-                response.ErrorMessage = "Invalid subject ID.";
-                return response;
+                throw new ArgumentException("Subject ID must be greater than 0.");
             }
 
             try
             {
                 var subjectDTO = _subjectRepository.GetSubjectById(id);
 
-                if (subjectDTO != null)
+                if (subjectDTO == null)
                 {
-                    var foundSubject = new Subject(subjectDTO);
-                    response.Succes = true;
-                    response.ErrorMessage = "An error occurred while finding the subject.";
-                    response.Data = foundSubject; // View requires a Subject, So i need temp data to transfer the subject.
+                    throw new ArgumentException("Subject not found.");
                 }
-                else
-                {
-                    response.ErrorMessage = "Subject not found.";
-                }
+
+                var foundsubject = new Subject(subjectDTO);
+                return foundsubject;
             }
             catch (DatabaseError dbex)
             {
@@ -100,8 +93,6 @@ namespace MythWikiBusiness.Services
             {
                 throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
             }
-
-            return response;
         }
 
 

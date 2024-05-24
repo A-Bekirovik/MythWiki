@@ -40,20 +40,27 @@ public class HomeController : Controller
     }
     public IActionResult Subject(int id)
     {
-        var response = subjectservice.GetSubjectById(id);
+        try 
+	    {
+            var subject = subjectservice.GetSubjectById(id);
 
-        if (response == null)
-        {
-            return NotFound();
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            return View(subject);
         }
-
-        if (!response.Succes)
-        {
-            TempData["ErrorMessage"] = response.ErrorMessage;
-            return RedirectToAction("Index");
+        catch(DatabaseError dbex) 
+	    {
+            TempData["ErrorMessage"] = dbex.Message;
+            return RedirectToAction("RemoveSubject");
         }
-
-        return View(response.Data); // This needs a subject
+        catch (SubjectError sex) 
+	    {
+            TempData["ErrorMessage"] = sex.Message;
+            return RedirectToAction("RemoveSubject");
+        }
     }
 
     public IActionResult DeleteSubject()
