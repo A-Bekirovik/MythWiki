@@ -45,12 +45,12 @@ namespace MythWikiData.Repository
         }
 
         //Create Subject
+        
         public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
-        {        
+        {
             SubjectDTO newSubject = new SubjectDTO();
-
-            try 
-	        {
+            try
+            {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
@@ -63,7 +63,7 @@ namespace MythWikiData.Repository
                     newSubject.Author = authorname;
                     newSubject.Date = DateTime.Now;
 
-                    string query = "INSER INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
+                    string query = "INSERT INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
                                    "VALUES (@SubjectID, @Title, @Text, @EditorID, @Image, @Author, @Date)";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
@@ -80,8 +80,8 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
-                var dbex = new DatabaseError("There's something wrong with the Database.", ex);
-                throw dbex;
+                Console.WriteLine(ex.Message);
+                throw new DatabaseError("There's something wrong with the Database.", ex);
             }
             return newSubject;
         }
@@ -109,6 +109,7 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
             }
             return newID;
@@ -131,7 +132,7 @@ namespace MythWikiData.Repository
                     command.Parameters.AddWithValue("@EditorID", subject.EditorID);
                     command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
                     command.Parameters.AddWithValue("@Author", subject.Author);
-                    command.Parameters.AddWithValue("@Date", subject.Date);
+                    command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
 
                     int rowsAffected = command.ExecuteNonQuery();
@@ -140,6 +141,7 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
             }
         }
@@ -147,10 +149,9 @@ namespace MythWikiData.Repository
         //Delete Subject
         public bool DeleteSubject(int subjectID)
         {
-            bool isDeleted = false;
-
             try 
 	        {
+                bool isDeleted = false;
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
@@ -164,12 +165,13 @@ namespace MythWikiData.Repository
 
                     isDeleted = rowsAffected > 0;
                 }
+                return isDeleted;
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
-            }
-            return isDeleted;
+            }            
         }
 
         //Get subject by id
@@ -206,6 +208,7 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
             }
             return subject;

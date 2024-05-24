@@ -21,13 +21,24 @@ namespace MythWikiBusiness.Services
         //This is a normal connection to the database, Ask if errorhandling is needed
 		public List<Subject> GetAllSubjects() 
 		{
-			List<SubjectDTO> subjectDTO = _subjectRepository.GetAllSubjects();
-            List<Subject> subjects = new List<Subject>();		
-            foreach (var dto in subjectDTO)
-            {
-                subjects.Add(new Subject(dto));
+            try 
+	        {
+                List<SubjectDTO> subjectDTO = _subjectRepository.GetAllSubjects();
+                List<Subject> subjects = new List<Subject>();
+                foreach (var dto in subjectDTO)
+                {
+                    subjects.Add(new Subject(dto));
+                }
+                return subjects;
             }
-            return subjects;
+            catch (DatabaseError dbex)
+            {
+                throw new DatabaseError("Cant create new subject due to Database", dbex);
+            }
+            catch (ArgumentException argex)
+            {
+                throw new SubjectError("Cant create new subject due to Service", argex);
+            }
 		}
 
         // ErrorHandling: Restrictions on what are needed to Create subject, Created Errorhandling in case Restriction.
@@ -46,124 +57,102 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database", dbex);
+                throw new DatabaseError("Cant create new subject due to Database: " + dbex.Message, dbex);
             }
 	        catch (ArgumentException argex) 
 	        {
-                throw new SubjectError("Cant create new subject due to Service", argex);
+                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
 	        }		 
 		}
 
         //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
-        public ServiceResponse GetSubjectById(int id)
+        public Subject GetSubjectById(int id)
         {
-            var response = new ServiceResponse { Succes = false };
-
-            if (id <= 0)
-            {
-                response.ErrorMessage = "Invalid subject ID.";
-                return response;
-            }
-
             try
             {
+                if (id <= 0)
+                {
+                    throw new ArgumentException("Subject ID must be greater than 0.");
+                }
+
                 var subjectDTO = _subjectRepository.GetSubjectById(id);
 
-                if (subjectDTO != null)
+                if (subjectDTO == null)
                 {
-                    var foundSubject = new Subject(subjectDTO);
-                    response.Succes = true;
-                    response.ErrorMessage = "An error occurred while finding the subject.";
-                    response.Data = foundSubject; // View requires a Subject, So i need temp data to transfer the subject.
+                    throw new ArgumentException("Subject not found.");
                 }
-                else
-                {
-                    response.ErrorMessage = "Subject not found.";
-                }
+
+                var foundsubject = new Subject(subjectDTO);
+                return foundsubject;
             }
             catch (DatabaseError dbex)
             {
-                response.ErrorMessage = dbex.Message;
+                throw new DatabaseError("Cant create new subject due to Database: " +dbex.Message, dbex);
             }
-
-            return response;
+            catch (ArgumentException argex)
+            {
+                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
+            }
         }
 
 
         // Added Errorhandling and restrictions
-        public ServiceResponse EditSubject(SubjectDTO subjectDTO)
+        public Subject EditSubject(SubjectDTO subjectDTO)
         {
-            var response = new ServiceResponse { Succes = false };
-
-            if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
-            {
-                response.ErrorMessage = "Title and Text need to be filled!";
-                return response;
-            }
-
             try
             {
+                if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
+                {
+                    throw new ArgumentException("Title and Text need to be filled!");
+                }
+
                 var isUpdated = _subjectRepository.EditSubject(subjectDTO);
-                if (isUpdated)
+                if (!isUpdated)
                 {
-                    var updatedSubject = new Subject(subjectDTO);
-                    response.Succes = true;
+                    throw new ArgumentException("Failed to update the subject.");
                 }
-                else
-                {
-                    response.ErrorMessage = "Failed to update the subject.";
-                }
+
+                var updatedSubject = new Subject(subjectDTO);
+                return updatedSubject;
             }
             catch (DatabaseError dbex)
             {
-                response.ErrorMessage = dbex.Message;
+                throw new DatabaseError("Cant edit new subject due to Database: " + dbex.Message, dbex);
             }
-
-            return response;
+            catch (ArgumentException argex)
+            {
+                throw new SubjectError("Cant edit new subject due to Service: " + argex.Message, argex);
+            }
         }
 
 
         // Added Errorhandling and restrictions
-        public bool DeleteSubject(int subjectID)
+        public bool DeleteSubject(int subjectID) // vragen om het beter is om de return in de try te zetten, of erbuiten te zetten zoals hier.
         {
-            var response = new ServiceResponse { Succes = false };
-
-            if (subjectID <= 0)
-            {
-                response.ErrorMessage = "Invalid subject ID.";
-                return response;
-            }
-
             try
             {
-                var existingSubject = _subjectRepository.GetSubjectById(subjectID);
-                if (existingSubject == null)
+                if (subjectID <= 0)
                 {
-                    response.ErrorMessage = "Subject doesn't exist.";
-                    return response;
+                    throw new ArgumentException("Subject ID must be greater than 0.");
+                }
+
+                var subject = _subjectRepository.GetSubjectById(subjectID);
+                if (subject == null)
+                {
+                    throw new ArgumentException("Subject doesn't exist.");
                 }
 
                 var isDeleted = _subjectRepository.DeleteSubject(subjectID);
-                if (isDeleted)
-                {
-                    response.Succes = true;
-                }
-                else
-                {
-                    response.ErrorMessage = "Failed to delete the subject.";
-                }
+                return isDeleted;
             }
             catch(DatabaseError dbex) 
 	        {
-                response.ErrorMessage = dbex.Message;
+                throw new DatabaseError("Couldnt delete Subject due to Database: " + dbex.Message, dbex);
 	        }
-            catch (Exception ex)
+            catch (ArgumentException argex)
             {
-                Console.WriteLine($"Exception occurred while deleting subject: {ex.Message}");
-                response.ErrorMessage = "An error occurred while deleting the subject.";
+                throw new SubjectError("Couldnt delete Subject due to Service: " + argex.Message, argex);
             }
-
-            return response;
         }
     }    
 }

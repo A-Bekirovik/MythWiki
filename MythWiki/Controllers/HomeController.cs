@@ -38,22 +38,30 @@ public class HomeController : Controller
     {
         return View();
     }
+
     public IActionResult Subject(int id)
     {
-        var response = subjectservice.GetSubjectById(id);
+        try 
+	    {
+            var subject = subjectservice.GetSubjectById(id);
 
-        if (response == null)
-        {
-            return NotFound();
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            return View(subject);
         }
-
-        if (!response.Succes)
-        {
-            TempData["ErrorMessage"] = response.ErrorMessage;
+        catch(DatabaseError dbex) 
+	    {
+            TempData["ErrorMessage"] = dbex.Message;
             return RedirectToAction("Index");
         }
-
-        return View(response.Data); // This needs a subject
+        catch (SubjectError sex) 
+	    {
+            TempData["ErrorMessage"] = sex.Message;
+            return RedirectToAction("Index");
+        }
     }
 
     public IActionResult DeleteSubject()
@@ -67,74 +75,82 @@ public class HomeController : Controller
         try 
 	    {
             var subject = subjectservice.DeleteSubject(subjectID);
+            return RedirectToAction("Index");
         }
         catch(DatabaseError dbex) 
 	    {
-            TempData["ErrorMessage"] = dbex;
+            TempData["ErrorMessage"] = dbex.Message;
             return RedirectToAction("RemoveSubject");
         }
         catch (SubjectError sex) 
 	    {
-            TempData["ErrorMessage"] = sex;
+            TempData["ErrorMessage"] = sex.Message;
             return RedirectToAction("RemoveSubject");
         }
-        return RedirectToAction("Index");
     }
 
     [HttpPost]
     public IActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
-    {
-        var response = subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
-
+    {       
         try 
-	    { 
-	    }
-        catch(DatabaseError dbex) 
 	    {
-            TempData["Errormessage"] = dbex;
+            subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
+            return RedirectToAction("Index");
+        }
+        catch (DatabaseError dbex)
+        {
+            TempData["ErrorMessage"] = dbex.Message;
             return RedirectToAction("AddSubject");
         }
-        catch (SubjectError sex) 
-	    {
-            TempData["Errormessage"] = sex;
+        catch (SubjectError sex)
+        {
+            TempData["ErrorMessage"] = sex.Message;
             return RedirectToAction("AddSubject");
         }
-        return RedirectToAction("Index");
+
     }
 
     [HttpGet]
     public IActionResult EditSubject(int id)
     {
-        var response = subjectservice.GetSubjectById(id);
+        var subject = subjectservice.GetSubjectById(id);
 
-        if (response == null)
+        if (subject == null)
         {
             return NotFound();
         }
-        return View(response.Data);
+        return View(subject);
     }
 
     [HttpPost]
-    public IActionResult EditSubject(int subjectID, string title, string text, int editorid, string imagelink, string authorname, DateTime date)
+    public IActionResult EditSubject(int subjectID, string title, string text, int editorid, string imagelink, string authorname)
     {
-        var subjectDTO = new SubjectDTO
+        try
         {
-            SubjectID = subjectID,
-            Title = title,
-            Text = text,
-            EditorID = editorid,
-            Image = imagelink,
-            Author = authorname,
-            Date = DateTime.Now
-        };
+            var subjectDTO = new SubjectDTO
+            {
+                SubjectID = subjectID,
+                Title = title,
+                Text = text,
+                EditorID = editorid,
+                Image = imagelink,
+                Author = authorname,
+            };
 
-        var response = subjectservice.EditSubject(subjectDTO);
-        if (!response.Succes)
-        {
-            TempData["ErrorMessage"] = response.ErrorMessage;
-            return RedirectToAction("EditSubject", new { id = subjectID });
+            var updatedSubject = subjectservice.EditSubject(subjectDTO);
+
+            return RedirectToAction("Subject", new { id = updatedSubject.SubjectID });
         }
-        return RedirectToAction("Index");
+        catch (DatabaseError dbex)
+        {
+            TempData["ErrorMessage"] = dbex.Message;
+            return RedirectToAction("Index");
+        }
+        catch (SubjectError sex)
+        {
+            TempData["ErrorMessage"] = sex.Message;
+            return RedirectToAction("Index");
+        }
     }
 
     [HttpGet]
