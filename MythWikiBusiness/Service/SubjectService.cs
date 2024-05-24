@@ -68,13 +68,13 @@ namespace MythWikiBusiness.Services
         //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
         public Subject GetSubjectById(int id)
         {
-            if (id <= 0)
-            {
-                throw new ArgumentException("Subject ID must be greater than 0.");
-            }
-
             try
             {
+                if (id <= 0)
+                {
+                    throw new ArgumentException("Subject ID must be greater than 0.");
+                }
+
                 var subjectDTO = _subjectRepository.GetSubjectById(id);
 
                 if (subjectDTO == null)
@@ -99,13 +99,13 @@ namespace MythWikiBusiness.Services
         // Added Errorhandling and restrictions
         public Subject EditSubject(SubjectDTO subjectDTO)
         {
-            if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
-            {
-                throw new ArgumentException("Title and Text need to be filled!");
-            }
-
             try
             {
+                if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
+                {
+                    throw new ArgumentException("Title and Text need to be filled!");
+                }
+
                 var isUpdated = _subjectRepository.EditSubject(subjectDTO);
                 if (!isUpdated)
                 {
@@ -117,11 +117,11 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database: " + dbex.Message, dbex);
+                throw new DatabaseError("Cant edit new subject due to Database: " + dbex.Message, dbex);
             }
             catch (ArgumentException argex)
             {
-                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
+                throw new SubjectError("Cant edit new subject due to Service: " + argex.Message, argex);
             }
         }
 
@@ -129,7 +129,6 @@ namespace MythWikiBusiness.Services
         // Added Errorhandling and restrictions
         public bool DeleteSubject(int subjectID) // vragen om het beter is om de return in de try te zetten, of erbuiten te zetten zoals hier.
         {
-
             try
             {
                 if (subjectID <= 0)
