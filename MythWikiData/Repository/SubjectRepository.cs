@@ -45,7 +45,7 @@ namespace MythWikiData.Repository
         }
 
         //Create Subject
-        //Create Subject
+        
         public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
         {
             SubjectDTO newSubject = new SubjectDTO();
@@ -80,8 +80,8 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
-                var dbex = new DatabaseError("There's something wrong with the Database.", ex);
-                throw dbex;
+                Console.WriteLine(ex.Message);
+                throw new DatabaseError("There's something wrong with the Database.", ex);
             }
             return newSubject;
         }
@@ -109,6 +109,7 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
             }
             return newID;
@@ -140,6 +141,7 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
             }
         }
@@ -147,10 +149,9 @@ namespace MythWikiData.Repository
         //Delete Subject
         public bool DeleteSubject(int subjectID)
         {
-            bool isDeleted = false;
-
             try 
 	        {
+                bool isDeleted = false;
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
@@ -164,12 +165,13 @@ namespace MythWikiData.Repository
 
                     isDeleted = rowsAffected > 0;
                 }
+                return isDeleted;
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
-            }
-            return isDeleted;
+            }            
         }
 
         //Get subject by id
@@ -206,6 +208,7 @@ namespace MythWikiData.Repository
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
             }
             return subject;

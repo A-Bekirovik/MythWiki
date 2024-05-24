@@ -67,18 +67,18 @@ public class HomeController : Controller
         try 
 	    {
             var subject = subjectservice.DeleteSubject(subjectID);
+            return RedirectToAction("Index");
         }
         catch(DatabaseError dbex) 
 	    {
-            TempData["ErrorMessage"] = dbex;
+            TempData["ErrorMessage"] = dbex.Message;
             return RedirectToAction("RemoveSubject");
         }
         catch (SubjectError sex) 
 	    {
-            TempData["ErrorMessage"] = sex;
+            TempData["ErrorMessage"] = sex.Message;
             return RedirectToAction("RemoveSubject");
         }
-        return RedirectToAction("Index");
     }
 
     [HttpPost]

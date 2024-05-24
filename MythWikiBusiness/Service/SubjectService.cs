@@ -57,11 +57,11 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database", dbex);
+                throw new DatabaseError("Cant create new subject due to Database: " + dbex.Message, dbex);
             }
 	        catch (ArgumentException argex) 
 	        {
-                throw new SubjectError("Cant create new subject due to Service", argex);
+                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
 	        }		 
 		}
 
@@ -94,11 +94,11 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database", dbex);
+                throw new DatabaseError("Cant create new subject due to Database: " +dbex.Message, dbex);
             }
             catch (ArgumentException argex)
             {
-                throw new SubjectError("Cant create new subject due to Service", argex);
+                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
             }
 
             return response;
@@ -131,11 +131,11 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database", dbex);
+                throw new DatabaseError("Cant create new subject due to Database: " + dbex.Message, dbex);
             }
             catch (ArgumentException argex)
             {
-                throw new SubjectError("Cant create new subject due to Service", argex);
+                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
             }
 
             return response;
@@ -145,31 +145,31 @@ namespace MythWikiBusiness.Services
         // Added Errorhandling and restrictions
         public bool DeleteSubject(int subjectID) // vragen om het beter is om de return in de try te zetten, of erbuiten te zetten zoals hier.
         {
-            var isDeleted = _subjectRepository.DeleteSubject(subjectID);
 
             try
             {
                 if (subjectID <= 0)
                 {
-                    throw new ArgumentException("Subject is null or 0");
+                    throw new ArgumentException("Subject ID must be greater than 0.");
                 }
 
-                var subjectid = _subjectRepository.GetSubjectById(subjectID);
-                if (subjectid == null)
+                var subject = _subjectRepository.GetSubjectById(subjectID);
+                if (subject == null)
                 {
                     throw new ArgumentException("Subject doesn't exist.");
                 }
+
+                var isDeleted = _subjectRepository.DeleteSubject(subjectID);
+                return isDeleted;
             }
             catch(DatabaseError dbex) 
 	        {
-                throw new DatabaseError("Couldnt delete Subject due to Database", dbex);
+                throw new DatabaseError("Couldnt delete Subject due to Database: " + dbex.Message, dbex);
 	        }
             catch (ArgumentException argex)
             {
-                throw new SubjectError("Couldnt delete Subject due to Service", argex);
+                throw new SubjectError("Couldnt delete Subject due to Service: " + argex.Message, argex);
             }
-
-            return isDeleted;
         }
     }    
 }
