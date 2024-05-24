@@ -83,23 +83,23 @@ public class HomeController : Controller
 
     [HttpPost]
     public IActionResult AddSubject(string title, string text, int editorid, string imagelink, string authorname)
-    {
-        var response = subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
-
+    {       
         try 
-	    { 
-	    }
-        catch(DatabaseError dbex) 
 	    {
-            TempData["Errormessage"] = dbex;
+            subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
+            return RedirectToAction("Index");
+        }
+        catch (DatabaseError dbex)
+        {
+            TempData["ErrorMessage"] = dbex.Message;
             return RedirectToAction("AddSubject");
         }
-        catch (SubjectError sex) 
-	    {
-            TempData["Errormessage"] = sex;
+        catch (SubjectError sex)
+        {
+            TempData["ErrorMessage"] = sex.Message;
             return RedirectToAction("AddSubject");
         }
-        return RedirectToAction("Index");
+
     }
 
     [HttpGet]

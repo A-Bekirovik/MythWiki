@@ -45,12 +45,12 @@ namespace MythWikiData.Repository
         }
 
         //Create Subject
+        //Create Subject
         public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
-        {        
+        {
             SubjectDTO newSubject = new SubjectDTO();
-
-            try 
-	        {
+            try
+            {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
@@ -63,7 +63,7 @@ namespace MythWikiData.Repository
                     newSubject.Author = authorname;
                     newSubject.Date = DateTime.Now;
 
-                    string query = "INSER INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
+                    string query = "INSERT INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
                                    "VALUES (@SubjectID, @Title, @Text, @EditorID, @Image, @Author, @Date)";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
