@@ -146,7 +146,7 @@ public class HomeController : Controller
             TempData["ErrorMessage"] = dbex.Message;
             return RedirectToAction("Index");
         }
-        catch (SubjectError sex)
+        catch (UserError sex)
         {
             TempData["ErrorMessage"] = sex.Message;
             return RedirectToAction("Index");
@@ -167,6 +167,67 @@ public class HomeController : Controller
     public IActionResult Error() 
     {
         return View(); 
+    }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Login(LoginViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                var user = userservice.Authenticate(model.Username, model.Password);
+                // Set up session or authentication cookie here
+                TempData["SuccessMessage"] = "Login successful!";
+                return RedirectToAction("Index");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                TempData["ErrorMessage"] = "Invalid username or password.";
+            }
+            catch (DatabaseError dbex)
+            {
+                TempData["ErrorMessage"] = dbex.Message;
+                return RedirectToAction("Index");
+            }
+            catch (UserError uex)
+            {
+                TempData["ErrorMessage"] = uex.Message;
+                return RedirectToAction("Index");
+            }
+        }
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Register(RegisterViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                var user = userservice.Register(model.Username, model.Password, model.Email);
+                TempData["SuccessMessage"] = "Registration successful! Please log in.";
+                return RedirectToAction("Login");
+            }
+            catch (UserError uex)
+            {
+                TempData["ErrorMessage"] = uex.Message;
+            }
+        }
+        return View(model);
     }
 }
 
