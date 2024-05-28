@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.Models;
