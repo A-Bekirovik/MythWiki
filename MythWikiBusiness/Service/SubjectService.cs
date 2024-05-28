@@ -39,28 +39,29 @@ namespace MythWikiBusiness.Services
             }
 		}
 
-		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
+        public Subject CreateSubject(string title, string text, int editorid, string imagelink, int authorID)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
                 {
-                    throw new ArgumentException("Title and Text need to be Filled!");
+                    throw new ArgumentException("Title and Text need to be filled!");
                 }
 
-                SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname);
+                SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorID);
                 Subject newsubject = new Subject(newsubjectDTO);
                 return newsubject;
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database: " + dbex.Message, dbex);
+                throw new DatabaseError("Can't create new subject due to Database: " + dbex.Message, dbex);
             }
-	        catch (ArgumentException argex) 
-	        {
-                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
-	        }		 
-		}
+            catch (ArgumentException argex)
+            {
+                throw new SubjectError("Can't create new subject due to Service: " + argex.Message, argex);
+            }
+        }
+
 
         public Subject GetSubjectById(int id)
         {

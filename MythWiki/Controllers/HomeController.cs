@@ -93,13 +93,14 @@ namespace MythWiki.Controllers
                 return RedirectToAction("RemoveSubject");
             }
         }
-
         [HttpPost]
-        public IActionResult AddSubject(string title, string text, int editorID, string imageLink, string authorName)
+        public IActionResult AddSubject(string title, string text, int editorid, string imagelink)
         {
             try
             {
-                _subjectService.CreateSubject(title, text, editorID, imageLink, authorName);
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                _subjectService.CreateSubject(title, text, editorid, imagelink, userId);
                 return RedirectToAction("Index");
             }
             catch (DatabaseError dbex)
@@ -114,6 +115,7 @@ namespace MythWiki.Controllers
             }
         }
 
+
         [HttpGet]
         public IActionResult EditSubject(int id)
         {
@@ -127,7 +129,7 @@ namespace MythWiki.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditSubject(int subjectID, string title, string text, int editorID, string imageLink, string authorName)
+        public IActionResult EditSubject(int subjectID, string title, string text, int editorID, string imageLink)
         {
             try
             {
@@ -137,8 +139,7 @@ namespace MythWiki.Controllers
                     Title = title,
                     Text = text,
                     EditorID = editorID,
-                    Image = imageLink,
-                    Author = authorName,
+                    Image = imageLink
                 };
 
                 var updatedSubject = _subjectService.EditSubject(subjectDTO);
