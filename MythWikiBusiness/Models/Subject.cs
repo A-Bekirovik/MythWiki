@@ -9,7 +9,8 @@ namespace MythWikiBusiness.Models
         public string Title { get; set; }
         public string Text { get; set; }
         public string Image { get; set; }
-        public string Author { get; set; }
+        public int AuthorID { get; set; }
+        public string AuthorName { get; set; }
         public DateTime Date { get; set; }
 
         public Subject()
@@ -23,7 +24,8 @@ namespace MythWikiBusiness.Models
             Title = subjectdto.Title;            
             Text = subjectdto.Text;
             Image = subjectdto.Image;
-            Author = subjectdto.Author;
+            AuthorID = subjectdto.AuthorID;
+            AuthorName = subjectdto.AuthorName;
             Date = subjectdto.Date;
 	    }
 	}
