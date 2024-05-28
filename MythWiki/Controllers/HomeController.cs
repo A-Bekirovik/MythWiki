@@ -12,24 +12,22 @@ namespace MythWiki.Controllers;
 
 public class HomeController : Controller
 {
-    
-
     private readonly ILogger<HomeController> _logger;
-    private readonly UserService userservice;
-    private readonly SubjectService subjectservice;
+    private readonly UserService _userservice;
+    private readonly SubjectService _subjectservice;
 
     private List<Subject> subjectlist = new List<Subject>();
 
-    public HomeController()
+    public HomeController(UserService userServ, SubjectService subjectServ)
     {
-        userservice = new UserService(new UserRepository());
-        subjectservice = new SubjectService(new SubjectRepository());
+        _userservice = userServ ?? throw new ArgumentNullException(nameof(userServ));
+        _subjectservice = subjectServ ?? throw new ArgumentNullException(nameof(subjectServ));
     }
 
     public IActionResult Index()
     {
         SubjectViewModel subjectviewmodel = new SubjectViewModel();
-        List<Subject> subjects = subjectservice.GetAllSubjects();
+        List<Subject> subjects = _subjectservice.GetAllSubjects();
         subjectviewmodel.subjectlist = subjects;   
         return View(subjectviewmodel);
     }
@@ -43,7 +41,7 @@ public class HomeController : Controller
     {
         try 
 	    {
-            var subject = subjectservice.GetSubjectById(id);
+            var subject = _subjectservice.GetSubjectById(id);
 
             if (subject == null)
             {
@@ -74,7 +72,7 @@ public class HomeController : Controller
     {
         try 
 	    {
-            var subject = subjectservice.DeleteSubject(subjectID);
+            var subject = _subjectservice.DeleteSubject(subjectID);
             return RedirectToAction("Index");
         }
         catch(DatabaseError dbex) 
@@ -94,7 +92,7 @@ public class HomeController : Controller
     {       
         try 
 	    {
-            subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
+            _subjectservice.CreateSubject(title, text, editorid, imagelink, authorname);
             return RedirectToAction("Index");
         }
         catch (DatabaseError dbex)
@@ -113,7 +111,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult EditSubject(int id)
     {
-        var subject = subjectservice.GetSubjectById(id);
+        var subject = _subjectservice.GetSubjectById(id);
 
         if (subject == null)
         {
@@ -137,7 +135,7 @@ public class HomeController : Controller
                 Author = authorname,
             };
 
-            var updatedSubject = subjectservice.EditSubject(subjectDTO);
+            var updatedSubject = _subjectservice.EditSubject(subjectDTO);
 
             return RedirectToAction("Subject", new { id = updatedSubject.SubjectID });
         }
@@ -182,7 +180,7 @@ public class HomeController : Controller
         {
             try
             {
-                var user = userservice.Authenticate(model.Username, model.Password);
+                var user = _userservice.Authenticate(model.Username, model.Password);
                 // Set up session or authentication cookie here
                 TempData["SuccessMessage"] = "Login successful!";
                 return RedirectToAction("Index");
@@ -194,12 +192,12 @@ public class HomeController : Controller
             catch (DatabaseError dbex)
             {
                 TempData["ErrorMessage"] = dbex.Message;
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
             catch (UserError uex)
             {
                 TempData["ErrorMessage"] = uex.Message;
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
         }
         return View(model);
@@ -218,9 +216,13 @@ public class HomeController : Controller
         {
             try
             {
-                var user = userservice.Register(model.Username, model.Password, model.Email);
+                var user = _userservice.Register(model.Username, model.Password, model.Email);
                 TempData["SuccessMessage"] = "Registration successful! Please log in.";
                 return RedirectToAction("Login");
+            }
+            catch (DatabaseError dbex)
+            {
+                TempData["ErrorMessage"] = dbex.Message;
             }
             catch (UserError uex)
             {

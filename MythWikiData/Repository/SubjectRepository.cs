@@ -8,7 +8,15 @@ namespace MythWikiData.Repository
 {
 	public class SubjectRepository : ISubjectRepo
 	{
-        private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
+        //private string connectionString;
+        // = "server=localhost;uid=root;pwd=;database=MythWikiDB";
+
+        private readonly string _connectionString;
+
+        public SubjectRepository(string connectionString)
+        {
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        }
 
         //Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
@@ -17,7 +25,7 @@ namespace MythWikiData.Repository
 
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -51,7 +59,7 @@ namespace MythWikiData.Repository
             SubjectDTO newSubject = new SubjectDTO();
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -93,7 +101,7 @@ namespace MythWikiData.Repository
 
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -120,7 +128,7 @@ namespace MythWikiData.Repository
         {
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -152,7 +160,7 @@ namespace MythWikiData.Repository
             try 
 	        {
                 bool isDeleted = false;
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -180,7 +188,7 @@ namespace MythWikiData.Repository
             SubjectDTO subject = null;
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 

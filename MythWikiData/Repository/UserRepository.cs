@@ -8,14 +8,19 @@ namespace MythWikiData.Repository
 {
 	public class UserRepository : IUserRepo
 	{
-        private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
+        private readonly string _connectionString;
+
+        public UserRepository(string connectionString)
+        {
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        }
 
         public List<UserDTO> GetAllUsers()
         {
             List<UserDTO> users = new List<UserDTO>();
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -47,7 +52,7 @@ namespace MythWikiData.Repository
 
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -83,7 +88,7 @@ namespace MythWikiData.Repository
 
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -98,7 +103,7 @@ namespace MythWikiData.Repository
                             user = new UserDTO
                             {
                                 UserID = Convert.ToInt32(reader["UserID"]),
-                                Username = reader["Username"].ToString(),
+                                Name = reader["Username"].ToString(),
                                 PasswordHash = reader["PasswordHash"].ToString(),
                                 Email = reader["Email"].ToString()
                             };
@@ -117,7 +122,7 @@ namespace MythWikiData.Repository
         {
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -125,7 +130,7 @@ namespace MythWikiData.Repository
                                    "VALUES (@Username, @PasswordHash, @Email, @CreatedDate)";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
-                    command.Parameters.AddWithValue("@Username", userDTO.Username);
+                    command.Parameters.AddWithValue("@Username", userDTO.Name);
                     command.Parameters.AddWithValue("@PasswordHash", userDTO.PasswordHash);
                     command.Parameters.AddWithValue("@Email", userDTO.Email);
                     command.Parameters.AddWithValue("@CreatedDate", DateTime.Now);

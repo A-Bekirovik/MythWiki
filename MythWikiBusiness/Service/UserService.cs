@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.ErrorHandling;
 using MythWikiBusiness.IRepository;
@@ -65,11 +64,11 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database", dbex);
+                throw new DatabaseError(dbex.Message, dbex);
             }
             catch (ArgumentException argex)
             {
-                throw new UserError("Cant create new subject due to Service", argex);
+                throw new UserError(argex.Message, argex);
             }
         }
 
@@ -87,11 +86,11 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database", dbex);
+                throw new DatabaseError(dbex.Message, dbex);
             }
             catch (UnauthorizedAccessException UAex)
             {
-                throw new UserError("Cant create new subject due to Service", UAex);
+                throw new UserError(UAex.Message, UAex);
             }
         }
 
