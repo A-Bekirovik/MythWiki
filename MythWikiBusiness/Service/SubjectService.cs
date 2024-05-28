@@ -18,7 +18,6 @@ namespace MythWikiBusiness.Services
 			_subjectRepository = subjectrepo; 
 		}
 
-        //This is a normal connection to the database, Ask if errorhandling is needed
 		public List<Subject> GetAllSubjects() 
 		{
             try 
@@ -41,7 +40,6 @@ namespace MythWikiBusiness.Services
             }
 		}
 
-        // ErrorHandling: Restrictions on what are needed to Create subject, Created Errorhandling in case Restriction.
 		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
         {
             try
@@ -65,7 +63,6 @@ namespace MythWikiBusiness.Services
 	        }		 
 		}
 
-        //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
         public Subject GetSubjectById(int id)
         {
             try
@@ -95,8 +92,6 @@ namespace MythWikiBusiness.Services
             }
         }
 
-
-        // Added Errorhandling and restrictions
         public Subject EditSubject(SubjectDTO subjectDTO)
         {
             try
@@ -125,9 +120,7 @@ namespace MythWikiBusiness.Services
             }
         }
 
-
-        // Added Errorhandling and restrictions
-        public bool DeleteSubject(int subjectID) // vragen om het beter is om de return in de try te zetten, of erbuiten te zetten zoals hier.
+        public bool DeleteSubject(int subjectID) 
         {
             try
             {
