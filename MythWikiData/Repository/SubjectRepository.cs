@@ -8,7 +8,15 @@ namespace MythWikiData.Repository
 {
 	public class SubjectRepository : ISubjectRepo
 	{
-        private string connectionString = "server=localhost;uid=root;pwd=;database=MythWikiDB";
+        //private string connectionString;
+        // = "server=localhost;uid=root;pwd=;database=MythWikiDB";
+
+        private readonly string _connectionString;
+
+        public SubjectRepository(string connectionString)
+        {
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        }
 
         //Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
@@ -17,7 +25,7 @@ namespace MythWikiData.Repository
 
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -45,13 +53,12 @@ namespace MythWikiData.Repository
         }
 
         //Create Subject
-        
-        public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
+        public SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink, int authorid)
         {
             SubjectDTO newSubject = new SubjectDTO();
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -60,11 +67,11 @@ namespace MythWikiData.Repository
                     newSubject.Title = title;
                     newSubject.Text = text;
                     newSubject.Image = imagelink;
-                    newSubject.Author = authorname;
+                    newSubject.AuthorID = authorid;
                     newSubject.Date = DateTime.Now;
 
-                    string query = "INSERT INTO Subject (SubjectID, Title, Text, EditorID, Image, Author, Date) " +
-                                   "VALUES (@SubjectID, @Title, @Text, @EditorID, @Image, @Author, @Date)";
+                    string query = "INSERT INTO Subject (SubjectID, Title, Text, EditorID, Image, AuthorID, Date) " +
+                                   "VALUES (@SubjectID, @Title, @Text, @EditorID, @Image, @AuthorID, @Date)";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
                     command.Parameters.AddWithValue("@SubjectID", newSubject.SubjectID);
@@ -72,7 +79,7 @@ namespace MythWikiData.Repository
                     command.Parameters.AddWithValue("@Text", text);
                     command.Parameters.AddWithValue("@EditorID", editorid);
                     command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(imagelink) ? (object)DBNull.Value : imagelink);
-                    command.Parameters.AddWithValue("@Author", authorname);
+                    command.Parameters.AddWithValue("@AuthorID", authorid);
                     command.Parameters.AddWithValue("@Date", newSubject.Date);
 
                     command.ExecuteNonQuery();
@@ -93,7 +100,7 @@ namespace MythWikiData.Repository
 
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -120,18 +127,17 @@ namespace MythWikiData.Repository
         {
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
-                    string query = "UPDATE Subject SET Title = @Title, Text = @Text, EditorID = @EditorID, Image = @Image, Author = @Author, Date = @Date WHERE SubjectID = @SubjectID";
+                    string query = "UPDATE Subject SET Title = @Title, Text = @Text, EditorID = @EditorID, Image = @Image, Date = @Date WHERE SubjectID = @SubjectID";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
                     command.Parameters.AddWithValue("@Title", subject.Title);
                     command.Parameters.AddWithValue("@Text", subject.Text);
                     command.Parameters.AddWithValue("@EditorID", subject.EditorID);
                     command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
-                    command.Parameters.AddWithValue("@Author", subject.Author);
                     command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
 
@@ -152,7 +158,7 @@ namespace MythWikiData.Repository
             try 
 	        {
                 bool isDeleted = false;
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
@@ -180,11 +186,16 @@ namespace MythWikiData.Repository
             SubjectDTO subject = null;
             try 
 	        {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
-                    string query = "SELECT * FROM Subject WHERE SubjectID = @SubjectID";
+                    string query = @"
+                SELECT s.SubjectID, s.Title, s.Text, s.EditorID, s.Image, s.AuthorID, u.Username as AuthorName, s.Date
+                FROM Subject s
+                LEFT JOIN Users u ON s.AuthorID = u.UserID
+                WHERE s.SubjectID = @SubjectID";
+
                     MySqlCommand command = new MySqlCommand(query, connection);
                     command.Parameters.AddWithValue("@SubjectID", id);
 
@@ -199,7 +210,8 @@ namespace MythWikiData.Repository
                             Text = reader["Text"].ToString(),
                             EditorID = Convert.ToInt32(reader["EditorID"]),
                             Image = reader["Image"].ToString(),
-                            Author = reader["Author"].ToString(),
+                            AuthorID = Convert.ToInt32(reader["AuthorID"]),
+                            AuthorName = reader["AuthorName"].ToString(),
                             Date = Convert.ToDateTime(reader["Date"])
                         };
                     }

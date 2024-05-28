@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.Models;
@@ -18,7 +17,6 @@ namespace MythWikiBusiness.Services
 			_subjectRepository = subjectrepo; 
 		}
 
-        //This is a normal connection to the database, Ask if errorhandling is needed
 		public List<Subject> GetAllSubjects() 
 		{
             try 
@@ -41,31 +39,30 @@ namespace MythWikiBusiness.Services
             }
 		}
 
-        // ErrorHandling: Restrictions on what are needed to Create subject, Created Errorhandling in case Restriction.
-		public Subject CreateSubject(string title, string text, int editorid, string imagelink, string authorname)
+        public Subject CreateSubject(string title, string text, int editorid, string imagelink, int authorID)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
                 {
-                    throw new ArgumentException("Title and Text need to be Filled!");
+                    throw new ArgumentException("Title and Text need to be filled!");
                 }
 
-                SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorname);
+                SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorID);
                 Subject newsubject = new Subject(newsubjectDTO);
                 return newsubject;
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database: " + dbex.Message, dbex);
+                throw new DatabaseError("Can't create new subject due to Database: " + dbex.Message, dbex);
             }
-	        catch (ArgumentException argex) 
-	        {
-                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
-	        }		 
-		}
+            catch (ArgumentException argex)
+            {
+                throw new SubjectError("Can't create new subject due to Service: " + argex.Message, argex);
+            }
+        }
 
-        //ErrorHandling: Can't get an error if it chooses something from within the subjectlist. Cant add restrictions cause it just works.
+
         public Subject GetSubjectById(int id)
         {
             try
@@ -95,8 +92,6 @@ namespace MythWikiBusiness.Services
             }
         }
 
-
-        // Added Errorhandling and restrictions
         public Subject EditSubject(SubjectDTO subjectDTO)
         {
             try
@@ -125,9 +120,7 @@ namespace MythWikiBusiness.Services
             }
         }
 
-
-        // Added Errorhandling and restrictions
-        public bool DeleteSubject(int subjectID) // vragen om het beter is om de return in de try te zetten, of erbuiten te zetten zoals hier.
+        public bool DeleteSubject(int subjectID) 
         {
             try
             {
