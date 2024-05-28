@@ -68,7 +68,7 @@ namespace MythWikiData.Repository
                             {
                                 UserID = Convert.ToInt32(reader["UserID"]),
                                 Name = reader["Username"].ToString(),
-                                PasswordHash = reader["PasswordHash"].ToString(),
+                                Password = reader["Password"].ToString(),
                                 Email = reader["Email"].ToString()
                             };
                         }
@@ -104,7 +104,7 @@ namespace MythWikiData.Repository
                             {
                                 UserID = Convert.ToInt32(reader["UserID"]),
                                 Name = reader["Username"].ToString(),
-                                PasswordHash = reader["PasswordHash"].ToString(),
+                                Password = reader["Password"].ToString(),
                                 Email = reader["Email"].ToString()
                             };
                         }
@@ -126,12 +126,12 @@ namespace MythWikiData.Repository
                 {
                     connection.Open();
 
-                    string query = "INSERT INTO Users (Username, PasswordHash, Email, CreatedDate) " +
-                                   "VALUES (@Username, @PasswordHash, @Email, @CreatedDate)";
+                    string query = "INSERT INTO Users (Username, Password, Email, CreatedDate) " +
+                                   "VALUES (@Username, @Password, @Email, @CreatedDate)";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
                     command.Parameters.AddWithValue("@Username", userDTO.Name);
-                    command.Parameters.AddWithValue("@PasswordHash", userDTO.PasswordHash);
+                    command.Parameters.AddWithValue("@Password", userDTO.Password);
                     command.Parameters.AddWithValue("@Email", userDTO.Email);
                     command.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
 

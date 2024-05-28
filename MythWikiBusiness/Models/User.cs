@@ -6,7 +6,7 @@ namespace MythWikiBusiness.Models
 	{
         public int UserID { get; set; }
         public string Name { get; set; }
-        public string PasswordHash { get; set; } // Store hashed passwords, not plain text
+        public string Password { get; set; }
         public string Email { get; set; }
         public DateTime CreatedDate { get; set; }
 
