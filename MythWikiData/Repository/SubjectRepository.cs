@@ -193,7 +193,7 @@ namespace MythWikiData.Repository
                     string query = @"
                 SELECT s.SubjectID, s.Title, s.Text, s.EditorID, s.Image, s.AuthorID, u.Username as AuthorName, s.Date
                 FROM Subject s
-                LEFT JOIN Users u ON s.AuthorID = u.UserID
+                INNER JOIN Users u ON s.AuthorID = u.UserID
                 WHERE s.SubjectID = @SubjectID";
 
                     MySqlCommand command = new MySqlCommand(query, connection);

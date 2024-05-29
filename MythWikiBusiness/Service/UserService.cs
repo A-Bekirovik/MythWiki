@@ -3,6 +3,7 @@ using MythWikiBusiness.DTO;
 using MythWikiBusiness.ErrorHandling;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MythWikiBusiness.Services
 {
@@ -18,77 +19,68 @@ namespace MythWikiBusiness.Services
         public List<User> GetAllUsers()
         {
             List<User> users = new List<User>();
+            List<UserDTO> usersDTO = new List<UserDTO>();
             try
             {
-                List<UserDTO> usersDTO = _userRepository.GetAllUsers();
-                foreach (var dto in usersDTO)
-                {
-                    users.Add(new User(dto));
-                }
+                usersDTO = _userRepository.GetAllUsers();
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError("Cant create new subject due to Database", dbex);
             }
-            catch (ArgumentException argex)
+            foreach (var dto in usersDTO)
             {
-                throw new UserError("Cant create new subject due to Service", argex);
+                users.Add(new User(dto));
             }
-
             return users;
         }
 
         public User Register(string username, string password, string email)
         {
-            try
+            UserDTO existingUser = _userRepository.GetUserByUsername(username);
+
+            var userDTO = new UserDTO
             {
-                var existingUser = _userRepository.GetUserByUsername(username);
-                if (existingUser != null)
-                {
-                    throw new ArgumentException("Username already exists.");
-                }
+                Name = username,
+                Password = password,
+                Email = email
+            };
 
-                var userDTO = new UserDTO
-                {
-                    Name = username,
-                    Password = password, // Store plain text password
-                    Email = email
-                };
+            if (existingUser != null)
+            {
+                throw new UserError("Username already exists.");
+            }
 
+            try
+            {	
                 _userRepository.AddUser(userDTO);
-
-                return new User(userDTO);
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError(dbex.Message, dbex);
             }
-            catch (ArgumentException argex)
-            {
-                throw new UserError(argex.Message, argex);
-            }
+
+            return new User(userDTO);
         }
 
         public User Authenticate(string username, string password)
         {
+            UserDTO userDTO;
+
             try
             {
-                var userDTO = _userRepository.GetUserByUsername(username);
-                if (userDTO == null || userDTO.Password != password)
-                {
-                    throw new UnauthorizedAccessException("Invalid username or password.");
-                }
-
-                return new User(userDTO);
+                userDTO = _userRepository.GetUserByUsername(username);
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError(dbex.Message, dbex);
             }
-            catch (UnauthorizedAccessException UAex)
+
+            if (userDTO == null || userDTO.Password != password)
             {
-                throw new UserError(UAex.Message, UAex);
+                throw new UserError("Invalid username or password.");
             }
+            return new User(userDTO);
         }
     }
 }

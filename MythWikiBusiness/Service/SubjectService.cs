@@ -19,133 +19,121 @@ namespace MythWikiBusiness.Services
 
 		public List<Subject> GetAllSubjects() 
 		{
+            List<SubjectDTO> subjectDTO = new List<SubjectDTO>();
+            List<Subject> subjects = new List<Subject>();
             try 
 	        {
-                List<SubjectDTO> subjectDTO = _subjectRepository.GetAllSubjects();
-                List<Subject> subjects = new List<Subject>();
-                foreach (var dto in subjectDTO)
-                {
-                    subjects.Add(new Subject(dto));
-                }
-                return subjects;
+                subjectDTO = _subjectRepository.GetAllSubjects();
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError("Cant create new subject due to Database", dbex);
             }
-            catch (ArgumentException argex)
+
+            foreach (var dto in subjectDTO)
             {
-                throw new SubjectError("Cant create new subject due to Service", argex);
+                subjects.Add(new Subject(dto));
             }
-		}
+            return subjects;
+        }
 
         public Subject CreateSubject(string title, string text, int editorid, string imagelink, int authorID)
         {
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
+            {
+                throw new SubjectError("Cant create subject due to Service: Title and Text need to be filled!");
+            }
+
+            SubjectDTO newsubjectDTO;
             try
             {
-                if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
-                {
-                    throw new ArgumentException("Title and Text need to be filled!");
-                }
-
-                SubjectDTO newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorID);
-                Subject newsubject = new Subject(newsubjectDTO);
-                return newsubject;
+                newsubjectDTO = _subjectRepository.CreateSubject(title, text, editorid, imagelink, authorID);
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError("Can't create new subject due to Database: " + dbex.Message, dbex);
             }
-            catch (ArgumentException argex)
-            {
-                throw new SubjectError("Can't create new subject due to Service: " + argex.Message, argex);
-            }
+            Subject newsubject = new Subject(newsubjectDTO);
+            return newsubject;
         }
 
 
         public Subject GetSubjectById(int id)
         {
+            if (id <= 0)
+            {
+                throw new SubjectError("Cant get subject due to Service: Subject ID must be greater than 0.");
+            }
+
+            SubjectDTO subjectDTO;
+
             try
             {
-                if (id <= 0)
-                {
-                    throw new ArgumentException("Subject ID must be greater than 0.");
-                }
-
-                var subjectDTO = _subjectRepository.GetSubjectById(id);
+                subjectDTO = _subjectRepository.GetSubjectById(id);
 
                 if (subjectDTO == null)
                 {
-                    throw new ArgumentException("Subject not found.");
+                    throw new ArgumentException("Cant get subject due to Service: Subject not found.");
                 }
-
-                var foundsubject = new Subject(subjectDTO);
-                return foundsubject;
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Cant create new subject due to Database: " +dbex.Message, dbex);
+                throw new DatabaseError("Cant get subject due to Database: " +dbex.Message, dbex);
             }
-            catch (ArgumentException argex)
-            {
-                throw new SubjectError("Cant create new subject due to Service: " + argex.Message, argex);
-            }
+
+            var foundsubject = new Subject(subjectDTO);
+            return foundsubject;
         }
 
         public Subject EditSubject(SubjectDTO subjectDTO)
         {
+            if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
+            {              
+                throw new SubjectError("Cant edit new subject due to Service: Title and Text need to be filled!");
+            }
+            bool isUpdated = false;
+
             try
             {
-                if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
-                {
-                    throw new ArgumentException("Title and Text need to be filled!");
-                }
-
-                var isUpdated = _subjectRepository.EditSubject(subjectDTO);
-                if (!isUpdated)
-                {
-                    throw new ArgumentException("Failed to update the subject.");
-                }
-
-                var updatedSubject = new Subject(subjectDTO);
-                return updatedSubject;
+                isUpdated = _subjectRepository.EditSubject(subjectDTO);
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError("Cant edit new subject due to Database: " + dbex.Message, dbex);
             }
-            catch (ArgumentException argex)
+
+            if (!isUpdated)
             {
-                throw new SubjectError("Cant edit new subject due to Service: " + argex.Message, argex);
+                throw new SubjectError("Cant edit new subject due to Service: Failed to update the subject.");
             }
+
+            var updatedSubject = new Subject(subjectDTO);
+            return updatedSubject;
+            
         }
 
         public bool DeleteSubject(int subjectID) 
         {
+            if (subjectID <= 0)
+            {
+                throw new SubjectError("Cant delete subject due to Service: Subject ID must be greater than 0.");
+            }
+
             try
             {
-                if (subjectID <= 0)
-                {
-                    throw new ArgumentException("Subject ID must be greater than 0.");
-                }
-
                 var subject = _subjectRepository.GetSubjectById(subjectID);
                 if (subject == null)
                 {
-                    throw new ArgumentException("Subject doesn't exist.");
+                    throw new SubjectError("Cant delete subject due to Service: Subject doesn't exist.");
                 }
-
-                var isDeleted = _subjectRepository.DeleteSubject(subjectID);
-                return isDeleted;
             }
             catch(DatabaseError dbex) 
 	        {
                 throw new DatabaseError("Couldnt delete Subject due to Database: " + dbex.Message, dbex);
 	        }
-            catch (ArgumentException argex)
-            {
-                throw new SubjectError("Couldnt delete Subject due to Service: " + argex.Message, argex);
-            }
+
+            var isDeleted = _subjectRepository.DeleteSubject(subjectID);
+            return isDeleted;
         }
     }    
 }
