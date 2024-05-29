@@ -12,7 +12,7 @@ namespace MythWikiData.Repository
 
         public UserRepository(string connectionString)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _connectionString = connectionString;
         }
 
         public List<UserDTO> GetAllUsers()

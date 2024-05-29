@@ -15,7 +15,7 @@ namespace MythWikiData.Repository
 
         public SubjectRepository(string connectionString)
         {
-            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _connectionString = connectionString;
         }
 
         //Get All Subjects

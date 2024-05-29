@@ -74,7 +74,7 @@ namespace MythWikiBusiness.Services
             try
             {
                 var userDTO = _userRepository.GetUserByUsername(username);
-                if (userDTO == null || userDTO.Password != password) // Compare plain text password
+                if (userDTO == null || userDTO.Password != password)
                 {
                     throw new UnauthorizedAccessException("Invalid username or password.");
                 }

@@ -22,8 +22,8 @@ namespace MythWiki.Controllers
 
         public HomeController(UserService userService, SubjectService subjectService)
         {
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _subjectService = subjectService ?? throw new ArgumentNullException(nameof(subjectService));
+            _userService = userService;
+            _subjectService = subjectService;
         }
 
         public IActionResult Index()
