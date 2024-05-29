@@ -8,9 +8,6 @@ namespace MythWikiData.Repository
 {
 	public class SubjectRepository : ISubjectRepo
 	{
-        //private string connectionString;
-        // = "server=localhost;uid=root;pwd=;database=MythWikiDB";
-
         private readonly string _connectionString;
 
         public SubjectRepository(string connectionString)
@@ -23,13 +20,18 @@ namespace MythWikiData.Repository
         {
             List<SubjectDTO> subjects = new List<SubjectDTO>();
 
-            try 
-	        {
+            try
+            {
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
-                    MySqlCommand command = new MySqlCommand("SELECT * FROM Subject", connection);
+                    string query = @"
+                SELECT s.SubjectID, s.Title, s.Text, s.EditorID, s.Image, s.AuthorID, s.Date, e.Username as EditorName
+                FROM Subject s
+                JOIN Users e ON s.EditorID = e.UserID";
+
+                    MySqlCommand command = new MySqlCommand(query, connection);
                     MySqlDataReader reader = command.ExecuteReader();
 
                     while (reader.Read())
@@ -38,7 +40,12 @@ namespace MythWikiData.Repository
                         {
                             SubjectID = Convert.ToInt16(reader["SubjectID"]),
                             Title = reader["Title"].ToString(),
-                            Text = reader["Text"].ToString()
+                            Text = reader["Text"].ToString(),
+                            EditorID = Convert.ToInt32(reader["EditorID"]),
+                            Image = reader["Image"].ToString(),
+                            AuthorID = Convert.ToInt32(reader["AuthorID"]),
+                            Date = Convert.ToDateTime(reader["Date"]),
+                            EditorName = reader["EditorName"].ToString()
                         };
                         subjects.Add(subject);
                     }
@@ -184,16 +191,16 @@ namespace MythWikiData.Repository
         public SubjectDTO GetSubjectById(int id)
         {
             SubjectDTO subject = null;
-            try 
-	        {
+            try
+            {
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
                     string query = @"
-                SELECT s.SubjectID, s.Title, s.Text, s.EditorID, s.Image, s.AuthorID, u.Username as AuthorName, s.Date
+                SELECT s.SubjectID, s.Title, s.Text, s.EditorID, s.Image, s.AuthorID, s.Date, e.Username as EditorName
                 FROM Subject s
-                LEFT JOIN Users u ON s.AuthorID = u.UserID
+                JOIN Users e ON s.EditorID = e.UserID
                 WHERE s.SubjectID = @SubjectID";
 
                     MySqlCommand command = new MySqlCommand(query, connection);
@@ -211,8 +218,8 @@ namespace MythWikiData.Repository
                             EditorID = Convert.ToInt32(reader["EditorID"]),
                             Image = reader["Image"].ToString(),
                             AuthorID = Convert.ToInt32(reader["AuthorID"]),
-                            AuthorName = reader["AuthorName"].ToString(),
-                            Date = Convert.ToDateTime(reader["Date"])
+                            Date = Convert.ToDateTime(reader["Date"]),
+                            EditorName = reader["EditorName"].ToString()
                         };
                     }
                     reader.Close();

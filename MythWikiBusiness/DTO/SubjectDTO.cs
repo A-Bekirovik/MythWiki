@@ -1,16 +1,4 @@
 ﻿using System;
-using MythWikiBusiness.Models;
-
-/*namespace MythWikiBusiness.DTO
-{
-    public class SubjectDTO
-    {
-        public int SubjectID { get; set; }
-        public int EditorID { get; set; }
-        public string Title { get; set; }
-        public string Text { get; set; }
-    }
-}*/
 
 namespace MythWikiBusiness.DTO
 {
@@ -23,6 +11,7 @@ namespace MythWikiBusiness.DTO
         public string Image { get; set; }
         public int AuthorID { get; set; }
         public string AuthorName { get; set; }
+        public string EditorName { get; set; }
         public DateTime Date { get; set; }
 	}
 }
