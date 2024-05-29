@@ -140,7 +140,7 @@ namespace MythWiki.Controllers
                     SubjectID = subjectID,
                     Title = title,
                     Text = text,
-                    EditorID = userId,
+                    UserID = userId,
                     Image = imageLink
                 };
 
