@@ -129,16 +129,18 @@ namespace MythWiki.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditSubject(int subjectID, string title, string text, int editorID, string imageLink)
+        public IActionResult EditSubject(int subjectID, string title, string text, string imageLink)
         {
             try
             {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
                 var subjectDTO = new SubjectDTO
                 {
                     SubjectID = subjectID,
                     Title = title,
                     Text = text,
-                    EditorID = editorID,
+                    EditorID = userId,
                     Image = imageLink
                 };
 
