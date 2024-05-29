@@ -1,9 +1,10 @@
 ﻿using System;
 using MythWikiBusiness.DTO;
+
 namespace MythWikiBusiness.Models
 {
-	public class Subject
-	{
+    public class Subject
+    {
         public int SubjectID { get; set; }
         public int EditorID { get; set; }
         public string Title { get; set; }
@@ -12,21 +13,23 @@ namespace MythWikiBusiness.Models
         public int AuthorID { get; set; }
         public string AuthorName { get; set; }
         public DateTime Date { get; set; }
+        public string EditorName { get; set; }
 
         public Subject()
-		{
-		}
+        {
+        }
 
-        public Subject(SubjectDTO subjectdto) 
-	    {
+        public Subject(SubjectDTO subjectdto)
+        {
             SubjectID = subjectdto.SubjectID;
             EditorID = subjectdto.EditorID;
-            Title = subjectdto.Title;            
+            Title = subjectdto.Title;
             Text = subjectdto.Text;
             Image = subjectdto.Image;
             AuthorID = subjectdto.AuthorID;
             AuthorName = subjectdto.AuthorName;
             Date = subjectdto.Date;
-	    }
-	}
+            EditorName = subjectdto.EditorName;
+        }
+    }
 }

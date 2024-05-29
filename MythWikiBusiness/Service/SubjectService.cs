@@ -67,18 +67,19 @@ namespace MythWikiBusiness.Services
 
             SubjectDTO subjectDTO;
 
+
             try
             {
                 subjectDTO = _subjectRepository.GetSubjectById(id);
-
-                if (subjectDTO == null)
-                {
-                    throw new ArgumentException("Cant get subject due to Service: Subject not found.");
-                }
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError("Cant get subject due to Database: " +dbex.Message, dbex);
+            }
+
+            if (subjectDTO == null)
+            {
+                throw new SubjectError("Cant get subject due to Service: Subject not found.");
             }
 
             var foundsubject = new Subject(subjectDTO);
@@ -119,18 +120,21 @@ namespace MythWikiBusiness.Services
                 throw new SubjectError("Cant delete subject due to Service: Subject ID must be greater than 0.");
             }
 
+            SubjectDTO subject;
             try
             {
-                var subject = _subjectRepository.GetSubjectById(subjectID);
-                if (subject == null)
-                {
-                    throw new SubjectError("Cant delete subject due to Service: Subject doesn't exist.");
-                }
+                subject = _subjectRepository.GetSubjectById(subjectID);
+
             }
             catch(DatabaseError dbex) 
 	        {
                 throw new DatabaseError("Couldnt delete Subject due to Database: " + dbex.Message, dbex);
 	        }
+
+            if (subject == null)
+            {
+                throw new SubjectError("Cant delete subject due to Service: Subject doesn't exist.");
+            }
 
             var isDeleted = _subjectRepository.DeleteSubject(subjectID);
             return isDeleted;
