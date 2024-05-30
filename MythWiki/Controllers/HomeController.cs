@@ -100,7 +100,7 @@ namespace MythWiki.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                _subjectService.CreateSubject(title, text, editorid, imagelink, userId);
+                _subjectService.CreateSubject(title, text, userId, imagelink, editorid);
                 return RedirectToAction("Index");
             }
             catch (DatabaseError dbex)

@@ -136,11 +136,14 @@ namespace MythWikiData.Repository
                 {
                     transaction?.Rollback();
                     Console.WriteLine(ex.Message);
-                    throw new DatabaseError("An error occurred while creating the subject.: " + ex.Message, ex);
+                    throw new DatabaseError("An error occurred while creating the subject.", ex);
                 }
             }
             return newSubject;
         }
+
+
+
 
 
         // Generate SubjectID
