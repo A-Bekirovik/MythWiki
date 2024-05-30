@@ -104,7 +104,7 @@ namespace MythWikiBusiness.Services
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Can't edit subject due to database error", dbex);
+                throw new DatabaseError("Can't edit subject due to database error: " + dbex.Message, dbex);
             }
 
             if (!isUpdated)
