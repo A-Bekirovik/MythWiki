@@ -40,7 +40,7 @@ namespace MythWikiBusiness.Services
         }
 
         // Create a new subject
-        public Subject CreateSubject(string title, string text, int userid, string imagelink, int authorID)
+        public Subject CreateSubject(string title, string text, int authorID, string imagelink)
         {
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
             {
@@ -51,12 +51,11 @@ namespace MythWikiBusiness.Services
 
             try
             {
-                newSubjectDTO = _subjectRepository.CreateSubject(title, text, userid, imagelink, authorID);
+                newSubjectDTO = _subjectRepository.CreateSubject(title, text, authorID, imagelink);
             }
             catch (DatabaseError dbex)
             {
-                throw new DatabaseError("Can't create new subject due to database error: " + dbex
-		    .Message, dbex);
+                throw new DatabaseError("Can't create new subject due to database error: " + dbex.Message, dbex);
             }
 
             return new Subject(newSubjectDTO);

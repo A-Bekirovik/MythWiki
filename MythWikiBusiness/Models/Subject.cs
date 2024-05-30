@@ -6,14 +6,14 @@ namespace MythWikiBusiness.Models
     public class Subject
     {
         public int SubjectID { get; set; }
-        public int UserID { get; set; }  // Renamed property
         public string Title { get; set; }
         public string Text { get; set; }
+        public int AuthorID { get; set; } 
+        public int EditorID { get; set; } 
         public string Image { get; set; }
-        public int AuthorID { get; set; }
-        public string AuthorName { get; set; }
         public DateTime Date { get; set; }
-        public string EditorName { get; set; }  // Add this line
+        public string AuthorName { get; set; }  
+        public string EditorName { get; set; } 
 
         public Subject()
         {
@@ -22,14 +22,14 @@ namespace MythWikiBusiness.Models
         public Subject(SubjectDTO subjectdto)
         {
             SubjectID = subjectdto.SubjectID;
-            UserID = subjectdto.UserID;
             Title = subjectdto.Title;
             Text = subjectdto.Text;
-            Image = subjectdto.Image;
             AuthorID = subjectdto.AuthorID;
-            AuthorName = subjectdto.AuthorName;
+            EditorID = subjectdto.EditorID;
+            Image = subjectdto.Image;
             Date = subjectdto.Date;
-            EditorName = subjectdto.EditorName;  // Add this line
+            AuthorName = subjectdto.AuthorName;
+            EditorName = subjectdto.EditorName;
         }
     }
 }

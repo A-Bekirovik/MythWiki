@@ -7,13 +7,13 @@ namespace MythWikiBusiness.DTO
         public int SubjectID { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public int UserID { get; set; }
+        public int AuthorID { get; set; }  // Permanent author ID
+        public int EditorID { get; set; }  // Last editor ID
         public string Image { get; set; }
-        public int AuthorID { get; set; }
         public DateTime Date { get; set; }
-        public string AuthorName { get; set; }
-        public string EditorName { get; set; } 
+        public string AuthorName { get; set; }  // Author's name
+        public string EditorName { get; set; }  // Editor's name
     }
-
 }
+
 
