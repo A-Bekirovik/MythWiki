@@ -9,7 +9,7 @@ namespace MythWikiBusiness.IRepository
 	public interface ISubjectRepo
 	{
 		List<SubjectDTO> GetAllSubjects();
-        SubjectDTO CreateSubject(string title, string text, int editorid, string imagelink);
+        SubjectDTO CreateSubject(string title, string text, int authorid, string imagelink);
         SubjectDTO GetSubjectById(int id);
         bool DeleteSubject(int subjectID);
         bool EditSubject(SubjectDTO subject);

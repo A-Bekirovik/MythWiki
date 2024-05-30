@@ -70,9 +70,9 @@ namespace MythWiki.Controllers
         {
             try
             {
-                var editorid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var authorid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                _subjectService.CreateSubject(title, text, editorid, imagelink);
+                _subjectService.CreateSubject(title, text, authorid, imagelink);
                 return RedirectToAction("Index");
             }
             catch (DatabaseError dbex)
