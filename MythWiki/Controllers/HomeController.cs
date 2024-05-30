@@ -65,6 +65,35 @@ namespace MythWiki.Controllers
             }
         }
 
+        public IActionResult DeleteSubject()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteSubject(int subjectID)
+        {
+            try
+            {
+                var isDeleted = _subjectService.DeleteSubject(subjectID);
+                if (!isDeleted)
+                {
+                    TempData["ErrorMessage"] = "Failed to delete the subject.";
+                }
+                return RedirectToAction("Index");
+            }
+            catch (DatabaseError dbex)
+            {
+                TempData["ErrorMessage"] = dbex.Message;
+                return RedirectToAction("RemoveSubject");
+            }
+            catch (SubjectError sex)
+            {
+                TempData["ErrorMessage"] = sex.Message;
+                return RedirectToAction("RemoveSubject");
+            }
+        }
+
         [HttpPost]
         public IActionResult AddSubject(string title, string text, string imagelink)
         {
