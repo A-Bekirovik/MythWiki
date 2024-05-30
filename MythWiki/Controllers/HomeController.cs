@@ -65,42 +65,14 @@ namespace MythWiki.Controllers
             }
         }
 
-        public IActionResult DeleteSubject()
-        {
-            return View();
-        }
-
         [HttpPost]
-        public IActionResult DeleteSubject(int subjectID)
+        public IActionResult AddSubject(string title, string text, string imagelink)
         {
             try
             {
-                var isDeleted = _subjectService.DeleteSubject(subjectID);
-                if (!isDeleted)
-                {
-                    TempData["ErrorMessage"] = "Failed to delete the subject.";
-                }
-                return RedirectToAction("Index");
-            }
-            catch (DatabaseError dbex)
-            {
-                TempData["ErrorMessage"] = dbex.Message;
-                return RedirectToAction("RemoveSubject");
-            }
-            catch (SubjectError sex)
-            {
-                TempData["ErrorMessage"] = sex.Message;
-                return RedirectToAction("RemoveSubject");
-            }
-        }
-        [HttpPost]
-        public IActionResult AddSubject(string title, string text, int editorid, string imagelink)
-        {
-            try
-            {
-                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                var editorid = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                _subjectService.CreateSubject(title, text, userId, imagelink, editorid);
+                _subjectService.CreateSubject(title, text, editorid, imagelink);
                 return RedirectToAction("Index");
             }
             catch (DatabaseError dbex)
@@ -114,7 +86,6 @@ namespace MythWiki.Controllers
                 return RedirectToAction("AddSubject");
             }
         }
-
 
         [HttpGet]
         public IActionResult EditSubject(int id)
@@ -128,7 +99,6 @@ namespace MythWiki.Controllers
             return View(subject);
         }
 
-        [HttpPost]
         public IActionResult EditSubject(int subjectID, string title, string text, string imageLink)
         {
             try
@@ -140,7 +110,7 @@ namespace MythWiki.Controllers
                     SubjectID = subjectID,
                     Title = title,
                     Text = text,
-                    UserID = userId,
+                    EditorID = userId,
                     Image = imageLink
                 };
 
@@ -160,7 +130,6 @@ namespace MythWiki.Controllers
             }
         }
 
-        [HttpGet]
         public IActionResult AddSubject()
         {
             return View();
@@ -192,10 +161,10 @@ namespace MythWiki.Controllers
                     var user = _userService.Authenticate(model.Username, model.Password);
 
                     var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Name),
-                        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
-                    };
+                {
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
+                };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

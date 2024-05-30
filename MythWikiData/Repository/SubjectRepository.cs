@@ -17,6 +17,7 @@ namespace MythWikiData.Repository
         }
 
         // Get All Subjects
+        // Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
         {
             List<SubjectDTO> subjects = new List<SubjectDTO>();
@@ -27,11 +28,11 @@ namespace MythWikiData.Repository
                 {
                     connection.Open();
 
+                    // Select the most recent editor for each subject
                     string query = @"
-                        SELECT s.SubjectID, s.Title, s.Text, su.UserID, s.Image, s.AuthorID, s.Date, u.Username as EditorName
-                        FROM Subject s
-                        INNER JOIN SubjectUsers su ON s.SubjectID = su.SubjectID
-                        INNER JOIN Users u ON su.UserID = u.UserID";
+                SELECT s.SubjectID, s.Title, s.Text, s.Image, s.EditorID AS UserID, s.Date, u.Username as EditorName
+                FROM Subject s
+                INNER JOIN Users u ON s.EditorID = u.UserID";
 
                     MySqlCommand command = new MySqlCommand(query, connection);
                     MySqlDataReader reader = command.ExecuteReader();
@@ -43,9 +44,8 @@ namespace MythWikiData.Repository
                             SubjectID = Convert.ToInt32(reader["SubjectID"]),
                             Title = reader["Title"].ToString(),
                             Text = reader["Text"].ToString(),
-                            UserID = Convert.ToInt32(reader["UserID"]),
+                            EditorID = Convert.ToInt32(reader["UserID"]),
                             Image = reader["Image"].ToString(),
-                            AuthorID = Convert.ToInt32(reader["AuthorID"]),
                             Date = Convert.ToDateTime(reader["Date"]),
                             EditorName = reader["EditorName"].ToString()
                         };
@@ -63,7 +63,7 @@ namespace MythWikiData.Repository
         }
 
         // Create Subject
-        public SubjectDTO CreateSubject(string title, string text, int userid, string imagelink, int authorid)
+        public SubjectDTO CreateSubject(string title, string text, int authorID, string imagelink)
         {
             SubjectDTO newSubject = new SubjectDTO();
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -74,36 +74,37 @@ namespace MythWikiData.Repository
                     connection.Open();
                     transaction = connection.BeginTransaction();
 
-                    // Check if UserID exists in Users table
-                    string checkUserQuery = "SELECT COUNT(*) FROM Users WHERE UserID = @UserID";
+                    // Check if AuthorID exists in Users table
+                    string checkUserQuery = "SELECT COUNT(*) FROM Users WHERE UserID = @AuthorID";
                     MySqlCommand checkUserCommand = new MySqlCommand(checkUserQuery, connection, transaction);
-                    checkUserCommand.Parameters.AddWithValue("@UserID", userid);
+                    checkUserCommand.Parameters.AddWithValue("@AuthorID", authorID);
                     int userExists = Convert.ToInt32(checkUserCommand.ExecuteScalar());
 
                     if (userExists == 0)
                     {
-                        throw new Exception("UserID does not exist in Users table.");
+                        throw new Exception("AuthorID does not exist in Users table.");
                     }
 
                     newSubject.SubjectID = GenerateNewSubjectID();
-                    newSubject.UserID = userid;
+                    newSubject.AuthorID = authorID;  
+                    newSubject.EditorID = authorID;  
                     newSubject.Title = title;
                     newSubject.Text = text;
                     newSubject.Image = imagelink;
-                    newSubject.AuthorID = authorid;
                     newSubject.Date = DateTime.Now;
 
                     // Insert into Subject table
                     string insertSubjectQuery = @"
-                INSERT INTO Subject (SubjectID, Title, Text, Image, AuthorID, Date)
-                VALUES (@SubjectID, @Title, @Text, @Image, @AuthorID, @Date)";
+                INSERT INTO Subject (SubjectID, Title, Text, Image, AuthorID, EditorID, Date)
+                VALUES (@SubjectID, @Title, @Text, @Image, @AuthorID, @EditorID, @Date)";
 
                     MySqlCommand insertSubjectCommand = new MySqlCommand(insertSubjectQuery, connection, transaction);
                     insertSubjectCommand.Parameters.AddWithValue("@SubjectID", newSubject.SubjectID);
                     insertSubjectCommand.Parameters.AddWithValue("@Title", title);
                     insertSubjectCommand.Parameters.AddWithValue("@Text", text);
                     insertSubjectCommand.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(imagelink) ? (object)DBNull.Value : imagelink);
-                    insertSubjectCommand.Parameters.AddWithValue("@AuthorID", authorid);
+                    insertSubjectCommand.Parameters.AddWithValue("@AuthorID", authorID);
+                    insertSubjectCommand.Parameters.AddWithValue("@EditorID", authorID);  // Initial editor is the author
                     insertSubjectCommand.Parameters.AddWithValue("@Date", newSubject.Date);
 
                     insertSubjectCommand.ExecuteNonQuery();
@@ -114,7 +115,7 @@ namespace MythWikiData.Repository
                 VALUES (@UserID, @SubjectID)";
 
                     MySqlCommand insertSubjectUsersCommand = new MySqlCommand(insertSubjectUsersQuery, connection, transaction);
-                    insertSubjectUsersCommand.Parameters.AddWithValue("@UserID", userid);
+                    insertSubjectUsersCommand.Parameters.AddWithValue("@UserID", authorID);
                     insertSubjectUsersCommand.Parameters.AddWithValue("@SubjectID", newSubject.SubjectID);
 
                     int rowsAffected = insertSubjectUsersCommand.ExecuteNonQuery();
@@ -130,7 +131,7 @@ namespace MythWikiData.Repository
                 {
                     transaction?.Rollback();
                     Console.WriteLine(ex.Message);
-                    throw new DatabaseError("There's something wrong with the Database.", ex);
+                    throw new DatabaseError("There's something wrong with the Database.: " + ex.Message, ex);
                 }
                 catch (Exception ex)
                 {
@@ -141,9 +142,6 @@ namespace MythWikiData.Repository
             }
             return newSubject;
         }
-
-
-
 
 
         // Generate SubjectID
@@ -184,15 +182,13 @@ namespace MythWikiData.Repository
                 {
                     connection.Open();
 
-                    string query = @"
-                        UPDATE Subject 
-                        SET Title = @Title, Text = @Text, Image = @Image, Date = @Date 
-                        WHERE SubjectID = @SubjectID";
-
+                    string query = "UPDATE Subject SET Title = @Title, Text = @Text, Image = @Image, EditorID = @EditorID, Date = @Date WHERE SubjectID = @SubjectID";
                     MySqlCommand command = new MySqlCommand(query, connection);
+
                     command.Parameters.AddWithValue("@Title", subject.Title);
                     command.Parameters.AddWithValue("@Text", subject.Text);
                     command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
+                    command.Parameters.AddWithValue("@EditorID", subject.EditorID);  // Update EditorID
                     command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
 
@@ -200,17 +196,16 @@ namespace MythWikiData.Repository
 
                     if (rowsAffected > 0)
                     {
-                        // Update SubjectUsers table
-                        string updateSubjectUsersQuery = @"
-                            UPDATE SubjectUsers 
-                            SET UserID = @UserID 
-                            WHERE SubjectID = @SubjectID";
+                        // Log edit in SubjectUsers table
+                        string logEditQuery = @"
+                    INSERT INTO SubjectUsers (UserID, SubjectID)
+                    VALUES (@UserID, @SubjectID)";
 
-                        MySqlCommand updateSubjectUsersCommand = new MySqlCommand(updateSubjectUsersQuery, connection);
-                        updateSubjectUsersCommand.Parameters.AddWithValue("@UserID", subject.UserID);
-                        updateSubjectUsersCommand.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
+                        MySqlCommand logEditCommand = new MySqlCommand(logEditQuery, connection);
+                        logEditCommand.Parameters.AddWithValue("@UserID", subject.EditorID);  // Log the editor
+                        logEditCommand.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
 
-                        updateSubjectUsersCommand.ExecuteNonQuery();
+                        logEditCommand.ExecuteNonQuery();
                     }
 
                     return rowsAffected > 0;
@@ -264,11 +259,10 @@ namespace MythWikiData.Repository
                     connection.Open();
 
                     string query = @"
-                        SELECT s.SubjectID, s.Title, s.Text, su.UserID, s.Image, s.AuthorID, s.Date, u.Username as EditorName
-                        FROM Subject s
-                        INNER JOIN SubjectUsers su ON s.SubjectID = su.SubjectID
-                        INNER JOIN Users u ON su.UserID = u.UserID
-                        WHERE s.SubjectID = @SubjectID";
+                SELECT s.SubjectID, s.Title, s.Text, s.Image, s.EditorID, u.Username AS EditorName, s.Date
+                FROM Subject s
+                INNER JOIN Users u ON s.EditorID = u.UserID
+                WHERE s.SubjectID = @SubjectID";
 
                     MySqlCommand command = new MySqlCommand(query, connection);
                     command.Parameters.AddWithValue("@SubjectID", id);
@@ -282,11 +276,10 @@ namespace MythWikiData.Repository
                             SubjectID = Convert.ToInt32(reader["SubjectID"]),
                             Title = reader["Title"].ToString(),
                             Text = reader["Text"].ToString(),
-                            UserID = Convert.ToInt32(reader["UserID"]),
                             Image = reader["Image"].ToString(),
-                            AuthorID = Convert.ToInt32(reader["AuthorID"]),
-                            Date = Convert.ToDateTime(reader["Date"]),
-                            EditorName = reader["EditorName"].ToString()
+                            EditorID = Convert.ToInt32(reader["EditorID"]),
+                            EditorName = reader["EditorName"].ToString(),
+                            Date = Convert.ToDateTime(reader["Date"])
                         };
                     }
                     reader.Close();
