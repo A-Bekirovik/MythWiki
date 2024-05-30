@@ -188,25 +188,11 @@ namespace MythWikiData.Repository
                     command.Parameters.AddWithValue("@Title", subject.Title);
                     command.Parameters.AddWithValue("@Text", subject.Text);
                     command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
-                    command.Parameters.AddWithValue("@EditorID", subject.EditorID);  // Update EditorID
+                    command.Parameters.AddWithValue("@EditorID", subject.EditorID);
                     command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
 
                     int rowsAffected = command.ExecuteNonQuery();
-
-                    if (rowsAffected > 0)
-                    {
-                        // Log edit in SubjectUsers table
-                        string logEditQuery = @"
-                    INSERT INTO SubjectUsers (UserID, SubjectID)
-                    VALUES (@UserID, @SubjectID)";
-
-                        MySqlCommand logEditCommand = new MySqlCommand(logEditQuery, connection);
-                        logEditCommand.Parameters.AddWithValue("@UserID", subject.EditorID);  // Log the editor
-                        logEditCommand.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
-
-                        logEditCommand.ExecuteNonQuery();
-                    }
 
                     return rowsAffected > 0;
                 }
@@ -217,6 +203,7 @@ namespace MythWikiData.Repository
                 throw new DatabaseError("Database got an error", ex);
             }
         }
+
 
         // Delete Subject
         public bool DeleteSubject(int subjectID)
