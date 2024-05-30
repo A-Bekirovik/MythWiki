@@ -95,8 +95,8 @@ namespace MythWikiData.Repository
 
                     // Insert into Subject table
                     string insertSubjectQuery = @"
-                INSERT INTO Subject (SubjectID, Title, Text, Image, AuthorID, EditorID, Date)
-                VALUES (@SubjectID, @Title, @Text, @Image, @AuthorID, @EditorID, @Date)";
+                INSERT INTO Subject (SubjectID, Title, Text, Image, EditorID, Date)
+                VALUES (@SubjectID, @Title, @Text, @Image, @AuthorID, @Date)";
 
                     MySqlCommand insertSubjectCommand = new MySqlCommand(insertSubjectQuery, connection, transaction);
                     insertSubjectCommand.Parameters.AddWithValue("@SubjectID", newSubject.SubjectID);
