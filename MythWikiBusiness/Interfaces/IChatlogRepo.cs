@@ -1,8 +1,0 @@
-﻿using System;
-namespace MythWikiBusiness.IRepository
-{
-	public interface IChatlogRepo
-	{
-	}
-}
-
