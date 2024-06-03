@@ -1,4 +1,5 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.ErrorHandling;
 using MythWikiBusiness.IRepository;
@@ -14,23 +15,34 @@ namespace UnitTest.FakeDAL
             _connectionString = connectionString;
         }
 
-        public List<UserDTO> GetAllUsers(List<UserDTO> userdtolist)
+        public List<UserDTO> GetAllUsers()
         {
             List<UserDTO> users = new List<UserDTO>();
             try
             {
-                UserDTO user = new UserDTO
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
-                    Name = reader["Name"].ToString(),
-                    UserID = Convert.ToInt32(reader["UserID"])
-                };
-                users.Add(user);
+                    connection.Open();
+
+                    MySqlCommand command = new MySqlCommand("SELECT * FROM User", connection);
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        UserDTO user = new UserDTO
+                        {
+                            Name = reader["Name"].ToString(),
+                            UserID = Convert.ToInt32(reader["UserID"])
+                        };
+                        users.Add(user);
+                    }
+                    reader.Close();
+                }
             }
-            catch (Exception ex)
+            catch (MySqlException ex)
             {
                 throw new DatabaseError("Database got an error", ex);
             }
-
             return users;
         }
 
