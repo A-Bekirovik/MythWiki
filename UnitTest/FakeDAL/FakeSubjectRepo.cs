@@ -7,53 +7,46 @@ using MythWikiBusiness.ErrorHandling;
 
 namespace UnitTest.FakeDAL
 {
-    public class SubjectRepository : ISubjectRepo
+    public class FakeSubjectRepo : ISubjectRepo
     {
-        private readonly string _connectionString;
+        List<SubjectDTO> subjects = new List<SubjectDTO>();
 
-        public SubjectRepository(string connectionString)
+        public FakeSubjectRepo()
         {
-            _connectionString = connectionString;
         }
 
         // Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
         {
-            List<SubjectDTO> subjects = new List<SubjectDTO>();
-
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
+
+                SubjectDTO subject = new SubjectDTO
                 {
-                    connection.Open();
+                    SubjectID = 1,
+                    Title = "title",
+                    Text = "text",
+                    EditorID = 1,
+                    Image = "",
+                    Date = DateTime.Now,
+                    EditorName = "Boebeh"
+                };
 
-                    // Select the most recent editor for each subject
-                    string query = @"
-                SELECT s.SubjectID, s.Title, s.Text, s.Image, s.EditorID AS UserID, s.Date, u.Username as EditorName
-                FROM Subject s
-                INNER JOIN Users u ON s.EditorID = u.UserID";
+                SubjectDTO subject1 = new SubjectDTO
+                {
+                    SubjectID = 1,
+                    Title = "title",
+                    Text = "text",
+                    EditorID = 1,
+                    Image = "",
+                    Date = DateTime.Now,
+                    EditorName = "Boebeh"
+                };
 
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    MySqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        SubjectDTO subject = new SubjectDTO
-                        {
-                            SubjectID = Convert.ToInt32(reader["SubjectID"]),
-                            Title = reader["Title"].ToString(),
-                            Text = reader["Text"].ToString(),
-                            EditorID = Convert.ToInt32(reader["UserID"]),
-                            Image = reader["Image"].ToString(),
-                            Date = Convert.ToDateTime(reader["Date"]),
-                            EditorName = reader["EditorName"].ToString()
-                        };
-                        subjects.Add(subject);
-                    }
-                    reader.Close();
-                }
+                subjects.Add(subject);
+                subjects.Add(subject1);
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 throw new DatabaseError("Database got an error", ex);
             }
@@ -106,7 +99,7 @@ namespace UnitTest.FakeDAL
                     }
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
@@ -138,7 +131,7 @@ namespace UnitTest.FakeDAL
                     return rowsAffected > 0;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
@@ -169,7 +162,7 @@ namespace UnitTest.FakeDAL
                     return rowsAffected > 0;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);
@@ -213,7 +206,7 @@ namespace UnitTest.FakeDAL
                     reader.Close();
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw new DatabaseError("Database got an error", ex);

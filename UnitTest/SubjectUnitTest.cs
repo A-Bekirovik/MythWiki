@@ -4,37 +4,38 @@ using MythWikiBusiness.Services;
 using MythWikiBusiness.ErrorHandling;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.Models;
+using MythWikiBusiness.IRepository;
 
 namespace MythWikiTests
 {
     [TestClass]
     public class SubjectUnitTests
     {
-        private SubjectRepository _subjectRepository;
+        private ISubjectRepo _subjectRepository;
         private SubjectService _subjectService;
 
         [TestInitialize]
         public void Setup()
         {
-            _subjectRepository = new SubjectRepository("fake_connection_string");
+            _subjectRepository = new FakeSubjectRepo();
             _subjectService = new SubjectService(_subjectRepository);
         }
 
         [TestMethod]
-        public void CreateSubject_ShouldReturnSubjectDTO_Repo()
+        public void CreateSubject_ShouldReturnSubject()
         {
             // Arrange
             string title = "Sample Title";
             string text = "Sample Text";
             int authorID = 1;
-            string imagelink = "";
+            string imagelink = "https://partyflock.nl/images/party/449316_539x303_650691/Boef.jpg";
 
             // Act
-            var result = _subjectRepository.CreateSubject(title, text, authorID, imagelink);
+            var result = _subjectService.CreateSubject(title, text, authorID, imagelink);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(SubjectDTO));
+            Assert.IsInstanceOfType(result, typeof(Subject));
             Assert.AreEqual(title, result.Title);
             Assert.AreEqual(text, result.Text);
             Assert.AreEqual(authorID, result.AuthorID);
@@ -42,34 +43,13 @@ namespace MythWikiTests
         }
 
         [TestMethod]
-        public void CreateSubject_ShouldReturnError_Repo()
+        public void CreateSubject_ShouldReturnError()
         {
             // Arrange
-            string title = null; // Causes Error, cause of restriction.
+            string title = null;
             string text = "Sample Text";
             int authorID = 1;
-            string imagelink = "";
-
-            // Act
-            var result = _subjectRepository.CreateSubject(title, text, authorID, imagelink);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(SubjectDTO));
-            Assert.AreEqual(title, result.Title);
-            Assert.AreEqual(text, result.Text);
-            Assert.AreEqual(authorID, result.AuthorID);
-            Assert.AreEqual(imagelink, result.Image);
-        }
-
-        [TestMethod]
-        public void CreateSubject_ShouldReturnSubject_Service()
-        {
-            // Arrange
-            string title = "Sample Title";
-            string text = "Sample Text";
-            int authorID = 1;
-            string imagelink = "";
+            string imagelink = "https://partyflock.nl/images/party/449316_539x303_650691/Boef.jpg";
 
             // Act
             var result = _subjectService.CreateSubject(title, text, authorID, imagelink);
