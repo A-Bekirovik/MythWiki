@@ -4,54 +4,56 @@ using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.ErrorHandling;
+using MythWikiBusiness.Models;
 
 namespace UnitTest.FakeDAL
 {
     public class FakeSubjectRepo : ISubjectRepo
     {
-        List<SubjectDTO> subjects = new List<SubjectDTO>();
+        List<SubjectDTO> subjects;
 
         public FakeSubjectRepo()
         {
+            subjects = new List<SubjectDTO>();
+
+            SubjectDTO subject = new SubjectDTO
+            {
+                SubjectID = 1,
+                Title = "title",
+                Text = "text",
+                EditorID = 1,
+                Image = "",
+                Date = DateTime.Now,
+                EditorName = "Boebeh"
+            };
+
+            SubjectDTO subject1 = new SubjectDTO
+            {
+                SubjectID = 2,
+                Title = "title",
+                Text = "text",
+                EditorID = 1,
+                Image = "",
+                Date = DateTime.Now,
+                EditorName = "Boebeh"
+            };
+
+            subjects.Add(subject);
+            subjects.Add(subject1);
         }
 
         // Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
         {
+
             try
             {
-
-                SubjectDTO subject = new SubjectDTO
-                {
-                    SubjectID = 1,
-                    Title = "title",
-                    Text = "text",
-                    EditorID = 1,
-                    Image = "",
-                    Date = DateTime.Now,
-                    EditorName = "Boebeh"
-                };
-
-                SubjectDTO subject1 = new SubjectDTO
-                {
-                    SubjectID = 1,
-                    Title = "title",
-                    Text = "text",
-                    EditorID = 1,
-                    Image = "",
-                    Date = DateTime.Now,
-                    EditorName = "Boebeh"
-                };
-
-                subjects.Add(subject);
-                subjects.Add(subject1);
+                return subjects;
             }
             catch (Exception ex)
             {
                 throw new DatabaseError("Database got an error", ex);
             }
-
-            return subjects;
         }
 
         // Create Subject
@@ -79,63 +81,28 @@ namespace UnitTest.FakeDAL
 
 
         // Generate SubjectID
-        private int GenerateNewSubjectID()
+        public int GenerateNewSubjectID()
         {
-            int newID = 1;
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = "SELECT MAX(SubjectID) FROM Subject";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-
-                    object result = command.ExecuteScalar();
-                    if (result != DBNull.Value)
-                    {
-                        newID = Convert.ToInt32(result) + 1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
-            return newID;
+            if (subjects.Count == 0)
+                return 1;
+            else
+                return subjects.Max(s => s.SubjectID) + 1;
         }
 
         // Edit Subject
         public bool EditSubject(SubjectDTO subject)
         {
-            try
+            var existingSubject = subjects.FirstOrDefault(s => s.SubjectID == subject.SubjectID);
+            if (existingSubject != null)
             {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = "UPDATE Subject SET Title = @Title, Text = @Text, Image = @Image, EditorID = @EditorID, Date = @Date WHERE SubjectID = @SubjectID";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-
-                    command.Parameters.AddWithValue("@Title", subject.Title);
-                    command.Parameters.AddWithValue("@Text", subject.Text);
-                    command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
-                    command.Parameters.AddWithValue("@EditorID", subject.EditorID);
-                    command.Parameters.AddWithValue("@Date", DateTime.Now);
-                    command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
-
-                    int rowsAffected = command.ExecuteNonQuery();
-
-                    return rowsAffected > 0;
-                }
+                existingSubject.Title = subject.Title;
+                existingSubject.Text = subject.Text;
+                existingSubject.Image = subject.Image;
+                existingSubject.EditorID = subject.EditorID;
+                existingSubject.Date = subject.Date;
+                return true;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
+            return false;
         }
 
 
