@@ -112,5 +112,34 @@ namespace MythWikiTests
             Assert.AreEqual(subjectDTO.EditorID, updatedSubject.EditorID);
             Assert.AreEqual(subjectDTO.Date, updatedSubject.Date);
         }
+
+        [TestMethod]
+        public void DeleteSubject_ShouldReturnTrue_WhenSubjectExists()
+        {
+            // Arrange
+            int subjectID = 1;
+
+            // Act
+            var result = _subjectService.DeleteSubject(subjectID);
+
+            // Assert
+            Assert.IsTrue(result);
+            var subject = _subjectRepository.GetAllSubjects().FirstOrDefault(s => s.SubjectID == subjectID);
+            Assert.IsNull(subject);
+        }
+
+        [TestMethod]
+        public void GetSubjectById_ShouldReturnSubject_WhenSubjectExists()
+        {
+            // Arrange
+            int subjectID = 1;
+
+            // Act
+            var result = _subjectService.GetSubjectById(subjectID);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(subjectID, result.SubjectID);	   
+        }
     }
 }

@@ -109,75 +109,19 @@ namespace UnitTest.FakeDAL
         // Delete Subject
         public bool DeleteSubject(int subjectID)
         {
-            try
+            var subject = subjects.FirstOrDefault(s => s.SubjectID == subjectID);
+            if (subject != null)
             {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string deleteSubjectUsersQuery = "DELETE FROM SubjectUsers WHERE SubjectID = @SubjectID";
-                    MySqlCommand deleteSubjectUsersCommand = new MySqlCommand(deleteSubjectUsersQuery, connection);
-                    deleteSubjectUsersCommand.Parameters.AddWithValue("@SubjectID", subjectID);
-                    deleteSubjectUsersCommand.ExecuteNonQuery();
-
-                    string deleteSubjectQuery = "DELETE FROM Subject WHERE SubjectID = @SubjectID";
-                    MySqlCommand deleteSubjectCommand = new MySqlCommand(deleteSubjectQuery, connection);
-                    deleteSubjectCommand.Parameters.AddWithValue("@SubjectID", subjectID);
-
-                    int rowsAffected = deleteSubjectCommand.ExecuteNonQuery();
-
-                    return rowsAffected > 0;
-                }
+                subjects.Remove(subject);
+                return true;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
+            return false;
         }
 
-        // Get Subject by ID
+        // Get Subject By ID
         public SubjectDTO GetSubjectById(int id)
         {
-            SubjectDTO subject = null;
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = @"
-                SELECT s.SubjectID, s.Title, s.Text, s.Image, s.EditorID, u.Username AS EditorName, s.Date
-                FROM Subject s
-                INNER JOIN Users u ON s.EditorID = u.UserID
-                WHERE s.SubjectID = @SubjectID";
-
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@SubjectID", id);
-
-                    MySqlDataReader reader = command.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        subject = new SubjectDTO
-                        {
-                            SubjectID = Convert.ToInt32(reader["SubjectID"]),
-                            Title = reader["Title"].ToString(),
-                            Text = reader["Text"].ToString(),
-                            Image = reader["Image"].ToString(),
-                            EditorID = Convert.ToInt32(reader["EditorID"]),
-                            EditorName = reader["EditorName"].ToString(),
-                            Date = Convert.ToDateTime(reader["Date"])
-                        };
-                    }
-                    reader.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
+            var subject = subjects.FirstOrDefault(s => s.SubjectID == id);
             return subject;
         }
     }
