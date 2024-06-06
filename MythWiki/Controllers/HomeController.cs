@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MythWiki.Models;
-using MythWikiBusiness.Models;
 using MythWikiBusiness.Services;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.ErrorHandling;

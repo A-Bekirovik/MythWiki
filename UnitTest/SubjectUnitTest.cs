@@ -52,16 +52,17 @@ namespace MythWikiTests
             int authorID = 1;
             string imagelink = "https://partyflock.nl/images/party/449316_539x303_650691/Boef.jpg";
 
-            // Act
-            var result = _subjectService.CreateSubject(title, text, authorID, imagelink);
-
-            // Assert Hier error aangeven 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(Subject));
-            Assert.AreEqual(title, result.Title);
-            Assert.AreEqual(text, result.Text);
-            Assert.AreEqual(authorID, result.AuthorID);
-            Assert.AreEqual(imagelink, result.Image);
+            try
+            {
+                // Act
+                _subjectService.CreateSubject(title, text, authorID, imagelink);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SubjectError ex)
+            {
+                // Assert
+                Assert.AreEqual("Can't create subject: Title and Text are required", ex.Message);
+            }
         }
 
 

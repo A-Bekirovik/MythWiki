@@ -3,7 +3,6 @@ using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.ErrorHandling;
 using MythWikiBusiness.IRepository;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace UnitTest.FakeDAL
 {
@@ -11,7 +10,7 @@ namespace UnitTest.FakeDAL
     {
         List<UserDTO> users;
 
-        public UserRepository()
+        public FakeUserRepo()
         {
             users = new List<UserDTO>();
 
@@ -26,8 +25,8 @@ namespace UnitTest.FakeDAL
             UserDTO user1 = new UserDTO
             {
                 UserID = 2,
-                Name = "title",
-                Password = "text",
+                Name = "title1",
+                Password = "text1",
                 Email = "Boebeh1@gmail.com"
             };
 
@@ -42,74 +41,13 @@ namespace UnitTest.FakeDAL
 
         public UserDTO GetUserByUsername(string username)
         {
-            UserDTO user = null;
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = "SELECT * FROM Users WHERE Username = @Username";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Username", username);
-
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            user = new UserDTO
-                            {
-                                UserID = Convert.ToInt32(reader["UserID"]),
-                                Name = reader["Username"].ToString(),
-                                Password = reader["Password"].ToString(),
-                                Email = reader["Email"].ToString()
-                            };
-                        }
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                throw new DatabaseError("Database encountered an error while fetching the user.", ex);
-            }
-
+            var user = users.FirstOrDefault(u => u.Name.Equals(username, StringComparison.OrdinalIgnoreCase));
             return user;
         }
 
         public UserDTO GetUserById(int userId)
         {
-            UserDTO user = null;
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = "SELECT * FROM Users WHERE UserID = @UserID";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@UserID", userId);
-
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            user = new UserDTO
-                            {
-                                UserID = Convert.ToInt32(reader["UserID"]),
-                                Name = reader["Username"].ToString(),
-                                Password = reader["Password"].ToString(),
-                                Email = reader["Email"].ToString()
-                            };
-                        }
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                throw new DatabaseError("Database encountered an error while fetching the user.", ex);
-            }
+            var user = users.FirstOrDefault(u => u.UserID == userId);
             return user;
         }
 
