@@ -72,9 +72,8 @@ namespace MythWikiData.Repository
                 try
                 {
                     connection.Open();
-                    transaction = connection.BeginTransaction();
-
-                    // Check if AuthorID exists in Users table
+                    
+		            // Check if AuthorID exists in Users table
                     string checkUserQuery = "SELECT COUNT(*) FROM Users WHERE UserID = @AuthorID";
                     MySqlCommand checkUserCommand = new MySqlCommand(checkUserQuery, connection, transaction);
                     checkUserCommand.Parameters.AddWithValue("@AuthorID", authorID);
@@ -124,19 +123,13 @@ namespace MythWikiData.Repository
                     {
                         throw new Exception("Insert into SubjectUsers table failed.");
                     }
-
-                    transaction.Commit();
                 }
                 catch (MySqlException ex)
                 {
-                    transaction?.Rollback();
-                    Console.WriteLine(ex.Message);
                     throw new DatabaseError("There's something wrong with the Database.: " + ex.Message, ex);
                 }
                 catch (Exception ex)
                 {
-                    transaction?.Rollback();
-                    Console.WriteLine(ex.Message);
                     throw new DatabaseError("An error occurred while creating the subject.", ex);
                 }
             }
