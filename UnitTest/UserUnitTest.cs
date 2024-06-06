@@ -10,16 +10,16 @@ using Org.BouncyCastle.Utilities;
 namespace MythWikiTests
 {
     [TestClass]
-    public class SubjectUnitTests
+    public class UserUnitTests
     {
-        private FakeSubjectRepo _subjectRepository;
-        private SubjectService _subjectService;
+        private FakeUserRepo _userRepository;
+        private UserService _userService;
 
         [TestInitialize]
         public void Setup()
         {
-            _subjectRepository = new FakeSubjectRepo();
-            _subjectService = new SubjectService(_subjectRepository);
+            _userRepository = new FakeUserRepo();
+            _userService = new UserService(_userRepository);
         }
 
         [TestMethod]

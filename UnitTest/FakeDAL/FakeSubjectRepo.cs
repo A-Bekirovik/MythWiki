@@ -45,38 +45,21 @@ namespace UnitTest.FakeDAL
         // Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
         {
-
-            try
-            {
-                return subjects;
-            }
-            catch (Exception ex)
-            {
-                throw new DatabaseError("Database got an error", ex);
-            }
+            return subjects;
         }
 
         // Create Subject
         public SubjectDTO CreateSubject(string title, string text, int authorID, string imagelink)
         {
-
-            try
+            SubjectDTO newSubject = new SubjectDTO()
             {
-                SubjectDTO newSubject = new SubjectDTO()
-                {
-                    Title = title,
-                    Text = text,
-		            AuthorID = authorID,
-		            Image = imagelink 
-		        };
+                Title = title,
+                Text = text,
+                AuthorID = authorID,
+                Image = imagelink
+            };
 
-                return newSubject;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("An error occurred while creating the subject.", ex);
-            }
+            return newSubject;
         }
 
 
