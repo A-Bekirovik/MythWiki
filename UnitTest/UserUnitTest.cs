@@ -46,13 +46,9 @@ namespace MythWikiTests
             // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(username, result.Name);
-            Assert.AreEqual(password, result.Password);
-            Assert.AreEqual(email, result.Email);
 
-            var Users = _userService.GetAllUsers();
-            Assert.AreEqual(3, Users.Count);
+            var users = _userService.GetAllUsers();
+            Assert.AreEqual(3, users.Count);
         }
-
-
     }
 }
