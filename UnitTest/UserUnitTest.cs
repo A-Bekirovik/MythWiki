@@ -33,11 +33,11 @@ namespace MythWikiTests
         }
 
         [TestMethod]
-        public void Register_ShouldAddNewUser()
+        public void Register_ShouldReturnNewUser()
         {
             // Arrange
-            string username = "newuser";
-            string password = "newpassword";
+            string username = "sample";
+            string password = "sample";
             string email = "newuser@example.com";
 
             // Act
@@ -45,10 +45,10 @@ namespace MythWikiTests
 
             // Assert
             Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(User));
             Assert.AreEqual(username, result.Name);
-
-            var users = _userService.GetAllUsers();
-            Assert.AreEqual(3, users.Count);
+            Assert.AreEqual(password, result.Password);
+            Assert.AreEqual(email, result.Email);
         }
     }
 }

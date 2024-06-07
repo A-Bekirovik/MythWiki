@@ -118,8 +118,10 @@ namespace MythWikiData.Repository
             return user;
         }
 
-        public void AddUser(UserDTO userDTO)
+        public UserDTO AddUser(string name, string password, string email)
         {
+            UserDTO newUser = null;
+
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -130,18 +132,27 @@ namespace MythWikiData.Repository
                                    "VALUES (@Username, @Password, @Email, @CreatedDate)";
                     MySqlCommand command = new MySqlCommand(query, connection);
 
-                    command.Parameters.AddWithValue("@Username", userDTO.Name);
-                    command.Parameters.AddWithValue("@Password", userDTO.Password);
-                    command.Parameters.AddWithValue("@Email", userDTO.Email);
+                    command.Parameters.AddWithValue("@Username", name);
+                    command.Parameters.AddWithValue("@Password", password);
+                    command.Parameters.AddWithValue("@Email", email);
                     command.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
 
                     command.ExecuteNonQuery();
+
+                    newUser = new UserDTO
+                    {
+                        Name = name,
+                        Password = password,
+                        Email = email
+                    };
                 }
             }
             catch (MySqlException ex)
             {
                 throw new DatabaseError("Database encountered an error while adding the user.", ex);
             }
+
+            return newUser;
         }
     }
 }

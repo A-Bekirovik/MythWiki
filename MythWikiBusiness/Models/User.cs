@@ -18,6 +18,8 @@ namespace MythWikiBusiness.Models
 		{
             Name = userdto.Name;
             UserID = userdto.UserID;
+            Password = userdto.Password;
+            Email = userdto.Email;
 		}
 	}
 }

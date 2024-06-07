@@ -51,15 +51,16 @@ namespace UnitTest.FakeDAL
             return user;
         }
 
-        public void AddUser(UserDTO userDTO)
+        public UserDTO AddUser(string name, string password, string email)
         {
-            UserDTO newUser = new UserDTO
+            UserDTO newUser = new UserDTO()
             {
                 UserID = 3,
-                Name = "title",
-                Password = "text",
-                Email = "Boebeh2@gmail.com"
+                Name = name,
+                Password = password,
+                Email = email
             };
+            return newUser;
         }
     }
 }
