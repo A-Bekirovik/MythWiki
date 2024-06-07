@@ -94,10 +94,10 @@ namespace MythWikiTests
             var subjectDTO = new SubjectDTO
             {
                 SubjectID = 1,
-                Title = "Updated Title",
-                Text = "Updated Text",
+                Title = "newTitle",
+                Text = "newText",
                 EditorID = 1,
-                Image = "updated_image.jpg",
+                Image = "image.jpg",
                 Date = DateTime.Now
             };
 
@@ -107,9 +107,9 @@ namespace MythWikiTests
             // Assert
             var updatedSubject = _subjectRepository.GetAllSubjects().Find(s => s.SubjectID == subjectDTO.SubjectID);
             Assert.IsNotNull(updatedSubject);
-            Assert.AreEqual("Updated Title", updatedSubject.Title);
-            Assert.AreEqual("Updated Text", updatedSubject.Text);
-            Assert.AreEqual("updated_image.jpg", updatedSubject.Image);
+            Assert.AreEqual("newTitle", updatedSubject.Title);
+            Assert.AreEqual("newText", updatedSubject.Text);
+            Assert.AreEqual("image.jpg", updatedSubject.Image);
             Assert.AreEqual(subjectDTO.EditorID, updatedSubject.EditorID);
             Assert.AreEqual(subjectDTO.Date, updatedSubject.Date);
         }

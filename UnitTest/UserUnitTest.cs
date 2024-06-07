@@ -37,7 +37,7 @@ namespace MythWikiTests
         {
             // Arrange
             string username = "sample";
-            string password = "sample";
+            string password = "sample password";
             string email = "newuser@example.com";
 
             // Act
@@ -49,6 +49,23 @@ namespace MythWikiTests
             Assert.AreEqual(username, result.Name);
             Assert.AreEqual(password, result.Password);
             Assert.AreEqual(email, result.Email);
+        }
+
+        [TestMethod]
+        public void Authenticate_ShouldReturnUser()
+        {
+            // Arrange
+            string username = "title";
+            string password = "text";
+
+            // Act
+            var result = _userService.Authenticate(username, password);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(User));
+            Assert.AreEqual(username, result.Name);
+            Assert.AreEqual(password, result.Password);
         }
     }
 }
