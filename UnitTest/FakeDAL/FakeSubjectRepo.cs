@@ -4,220 +4,107 @@ using MySql.Data.MySqlClient;
 using MythWikiBusiness.DTO;
 using MythWikiBusiness.IRepository;
 using MythWikiBusiness.ErrorHandling;
+using MythWikiBusiness.Models;
 
 namespace UnitTest.FakeDAL
 {
-    public class SubjectRepository : ISubjectRepo
+    public class FakeSubjectRepo : ISubjectRepo
     {
-        private readonly string _connectionString;
+        List<SubjectDTO> subjects;
 
-        public SubjectRepository(string connectionString)
+        public FakeSubjectRepo()
         {
-            _connectionString = connectionString;
+            subjects = new List<SubjectDTO>();
+
+            SubjectDTO subject = new SubjectDTO
+            {
+                SubjectID = 1,
+                Title = "title",
+                Text = "text",
+                EditorID = 1,
+                Image = "",
+                Date = DateTime.Now,
+                EditorName = "Boebeh"
+            };
+
+            SubjectDTO subject1 = new SubjectDTO
+            {
+                SubjectID = 2,
+                Title = "title",
+                Text = "text",
+                EditorID = 1,
+                Image = "",
+                Date = DateTime.Now,
+                EditorName = "Boebeh"
+            };
+
+            subjects.Add(subject);
+            subjects.Add(subject1);
         }
 
         // Get All Subjects
         public List<SubjectDTO> GetAllSubjects()
         {
-            List<SubjectDTO> subjects = new List<SubjectDTO>();
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    // Select the most recent editor for each subject
-                    string query = @"
-                SELECT s.SubjectID, s.Title, s.Text, s.Image, s.EditorID AS UserID, s.Date, u.Username as EditorName
-                FROM Subject s
-                INNER JOIN Users u ON s.EditorID = u.UserID";
-
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    MySqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        SubjectDTO subject = new SubjectDTO
-                        {
-                            SubjectID = Convert.ToInt32(reader["SubjectID"]),
-                            Title = reader["Title"].ToString(),
-                            Text = reader["Text"].ToString(),
-                            EditorID = Convert.ToInt32(reader["UserID"]),
-                            Image = reader["Image"].ToString(),
-                            Date = Convert.ToDateTime(reader["Date"]),
-                            EditorName = reader["EditorName"].ToString()
-                        };
-                        subjects.Add(subject);
-                    }
-                    reader.Close();
-                }
-            }
-            catch (MySqlException ex)
-            {
-                throw new DatabaseError("Database got an error", ex);
-            }
-
             return subjects;
         }
 
         // Create Subject
         public SubjectDTO CreateSubject(string title, string text, int authorID, string imagelink)
         {
-
-            try
+            SubjectDTO newSubject = new SubjectDTO()
             {
-                SubjectDTO newSubject = new SubjectDTO()
-                {
-                    Title = title,
-                    Text = text,
-		            AuthorID = authorID,
-		            Image = imagelink 
-		        };
+                Title = title,
+                Text = text,
+                AuthorID = authorID,
+                Image = imagelink
+            };
 
-                return newSubject;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("An error occurred while creating the subject.", ex);
-            }
+            return newSubject;
         }
 
 
         // Generate SubjectID
-        private int GenerateNewSubjectID()
+        public int GenerateNewSubjectID()
         {
-            int newID = 1;
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = "SELECT MAX(SubjectID) FROM Subject";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-
-                    object result = command.ExecuteScalar();
-                    if (result != DBNull.Value)
-                    {
-                        newID = Convert.ToInt32(result) + 1;
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
-            return newID;
+            if (subjects.Count == 0)
+                return 1;
+            else
+                return subjects.Max(s => s.SubjectID) + 1;
         }
 
         // Edit Subject
         public bool EditSubject(SubjectDTO subject)
         {
-            try
+            var existingSubject = subjects.FirstOrDefault(s => s.SubjectID == subject.SubjectID);
+            if (existingSubject != null)
             {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = "UPDATE Subject SET Title = @Title, Text = @Text, Image = @Image, EditorID = @EditorID, Date = @Date WHERE SubjectID = @SubjectID";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-
-                    command.Parameters.AddWithValue("@Title", subject.Title);
-                    command.Parameters.AddWithValue("@Text", subject.Text);
-                    command.Parameters.AddWithValue("@Image", string.IsNullOrEmpty(subject.Image) ? (object)DBNull.Value : subject.Image);
-                    command.Parameters.AddWithValue("@EditorID", subject.EditorID);
-                    command.Parameters.AddWithValue("@Date", DateTime.Now);
-                    command.Parameters.AddWithValue("@SubjectID", subject.SubjectID);
-
-                    int rowsAffected = command.ExecuteNonQuery();
-
-                    return rowsAffected > 0;
-                }
+                existingSubject.Title = subject.Title;
+                existingSubject.Text = subject.Text;
+                existingSubject.Image = subject.Image;
+                existingSubject.EditorID = subject.EditorID;
+                existingSubject.Date = subject.Date;
+                return true;
             }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
+            return false;
         }
 
 
         // Delete Subject
         public bool DeleteSubject(int subjectID)
         {
-            try
+            var subject = subjects.FirstOrDefault(s => s.SubjectID == subjectID);
+            if (subject != null)
             {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string deleteSubjectUsersQuery = "DELETE FROM SubjectUsers WHERE SubjectID = @SubjectID";
-                    MySqlCommand deleteSubjectUsersCommand = new MySqlCommand(deleteSubjectUsersQuery, connection);
-                    deleteSubjectUsersCommand.Parameters.AddWithValue("@SubjectID", subjectID);
-                    deleteSubjectUsersCommand.ExecuteNonQuery();
-
-                    string deleteSubjectQuery = "DELETE FROM Subject WHERE SubjectID = @SubjectID";
-                    MySqlCommand deleteSubjectCommand = new MySqlCommand(deleteSubjectQuery, connection);
-                    deleteSubjectCommand.Parameters.AddWithValue("@SubjectID", subjectID);
-
-                    int rowsAffected = deleteSubjectCommand.ExecuteNonQuery();
-
-                    return rowsAffected > 0;
-                }
+                subjects.Remove(subject);
+                return true;
             }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
+            return false;
         }
 
-        // Get Subject by ID
+        // Get Subject By ID
         public SubjectDTO GetSubjectById(int id)
         {
-            SubjectDTO subject = null;
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-
-                    string query = @"
-                SELECT s.SubjectID, s.Title, s.Text, s.Image, s.EditorID, u.Username AS EditorName, s.Date
-                FROM Subject s
-                INNER JOIN Users u ON s.EditorID = u.UserID
-                WHERE s.SubjectID = @SubjectID";
-
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@SubjectID", id);
-
-                    MySqlDataReader reader = command.ExecuteReader();
-
-                    if (reader.Read())
-                    {
-                        subject = new SubjectDTO
-                        {
-                            SubjectID = Convert.ToInt32(reader["SubjectID"]),
-                            Title = reader["Title"].ToString(),
-                            Text = reader["Text"].ToString(),
-                            Image = reader["Image"].ToString(),
-                            EditorID = Convert.ToInt32(reader["EditorID"]),
-                            EditorName = reader["EditorName"].ToString(),
-                            Date = Convert.ToDateTime(reader["Date"])
-                        };
-                    }
-                    reader.Close();
-                }
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new DatabaseError("Database got an error", ex);
-            }
+            var subject = subjects.FirstOrDefault(s => s.SubjectID == id);
             return subject;
         }
     }

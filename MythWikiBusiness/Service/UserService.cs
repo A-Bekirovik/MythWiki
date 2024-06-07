@@ -39,28 +39,23 @@ namespace MythWikiBusiness.Services
         {
             UserDTO existingUser = _userRepository.GetUserByUsername(username);
 
-            var userDTO = new UserDTO
-            {
-                Name = username,
-                Password = password,
-                Email = email
-            };
-
             if (existingUser != null)
             {
                 throw new UserError("Username already exists.");
             }
 
+            UserDTO userdto;
+
             try
             {	
-                _userRepository.AddUser(userDTO);
+                userdto = _userRepository.AddUser(username, password, email);
             }
             catch (DatabaseError dbex)
             {
                 throw new DatabaseError(dbex.Message, dbex);
             }
 
-            return new User(userDTO);
+            return new User(userdto);
         }
 
         public User Authenticate(string username, string password)

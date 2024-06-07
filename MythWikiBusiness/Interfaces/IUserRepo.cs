@@ -10,7 +10,7 @@ namespace MythWikiBusiness.IRepository
         List<UserDTO> GetAllUsers();
         UserDTO GetUserByUsername(string username);
         UserDTO GetUserById(int userId);
-        void AddUser(UserDTO userDTO);
+        UserDTO AddUser(string name, string password, string email);
     }
 }
 

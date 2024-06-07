@@ -16,7 +16,6 @@ namespace MythWikiBusiness.Services
             _subjectRepository = subjectrepo;
         }
 
-        // Retrieve all subjects
         public List<Subject> GetAllSubjects()
         {
             List<SubjectDTO> subjectDTOs;
@@ -39,7 +38,6 @@ namespace MythWikiBusiness.Services
             return subjects;
         }
 
-        // Create a new subject
         public Subject CreateSubject(string title, string text, int authorID, string imagelink)
         {
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(text))
@@ -61,7 +59,6 @@ namespace MythWikiBusiness.Services
             return new Subject(newSubjectDTO);
         }
 
-        // Retrieve a subject by ID
         public Subject GetSubjectById(int id)
         {
             if (id <= 0)
@@ -88,7 +85,6 @@ namespace MythWikiBusiness.Services
             return new Subject(subjectDTO);
         }
 
-        // Edit an existing subject
         public Subject EditSubject(SubjectDTO subjectDTO)
         {
             if (subjectDTO == null || string.IsNullOrWhiteSpace(subjectDTO.Title) || string.IsNullOrWhiteSpace(subjectDTO.Text))
@@ -115,7 +111,6 @@ namespace MythWikiBusiness.Services
             return new Subject(subjectDTO);
         }
 
-        // Delete a subject
         public bool DeleteSubject(int subjectID)
         {
             if (subjectID <= 0)
